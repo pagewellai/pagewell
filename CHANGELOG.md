@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.6.1 — 2026-10-11
+
+Rebuilt from current PageWell source. No user-facing SKILL or CLI behavior changes from v0.6.0.
+
+Source commit `037b515`. Update with `pagewell upgrade`.
+
 ## v0.6.0 — 2026-10-11
 
 Every listed template now ships with what it looks like. The skill carries assets/templates/article/: desktop.webp and phone.webp (screenshots of the template's preview page) and samples/*.md (finished documents written with it), so an agent can show a user the result and read a sample without going online. The preview page itself, https://pagewell.ai/templates/article, is rendered live from the template's first sample. pagewell templates list no longer shows a variant count. SKILL: when someone asks what it will look like, hand over the preview link or desktop.webp; read one sample before the first document with a template.
