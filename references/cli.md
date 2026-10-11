@@ -349,7 +349,7 @@ templates list [--kind template|components] [--category c] [--lang l] [--mine] [
 templates show <id> [--full] [--json]
 templates use <id> [--title t] [-o FILE] [--json]
 templates samples <id> [--source <sample-id>]
-templates preview <id> [--variant v]
+templates preview <id>
 
 templates new <id> [--kind template|components] [--mode prose|form|artifact] [--from <builtin-id>] [--dir D]
 templates fork <src> <id> [--dir D]
@@ -373,11 +373,13 @@ included — context is money.
 `use` is `add` + `show` + `scaffold` in one call, and writes a skeleton with
 `⟦…⟧` placeholders. It refuses to overwrite an existing file.
 
-Both also carry `template.preview_url` and `template.screenshots` when the
-server has them: a finished page made with this template, for someone who asks
-what they will get. `templates list --json` carries the same as `preview_url`,
-`screenshots` and `thumbnail_url` (the first screenshot). Offline, or against an
-older server, they are absent — not an error.
+Both also carry `template.preview_url` and `template.screenshots` for a listed
+template: its preview page (rendered live from its first sample) and
+screenshots of that page, for someone who asks what they will get.
+`templates list --json` carries the same as `preview_url`, `screenshots` and
+`thumbnail_url` (the first screenshot). Offline, or against an older server,
+they are absent — not an error; the same screenshots and the samples ship with
+this skill in `assets/templates/<id>/`.
 
 `validate` loads a working copy, renders every sample and runs the template's
 own checks. **It fails on a doc template with no sample** — a template that

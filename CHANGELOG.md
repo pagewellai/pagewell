@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.6.0 — 2026-10-11
+
+Every listed template now ships with what it looks like. The skill carries assets/templates/article/: desktop.webp and phone.webp (screenshots of the template's preview page) and samples/*.md (finished documents written with it), so an agent can show a user the result and read a sample without going online. The preview page itself, https://pagewell.ai/templates/article, is rendered live from the template's first sample. pagewell templates list no longer shows a variant count. SKILL: when someone asks what it will look like, hand over the preview link or desktop.webp; read one sample before the first document with a template.
+
+Source commit `1adea79`. Update with `pagewell upgrade`.
+
 ## v0.5.0 — 2026-10-11
 
 Templates now follow what the user asks for instead of a menu. pagewell preview has no template or variant pickers and no longer reads ?theme=, ?variant= or the pw_theme cookie: every document is shown with the template its own front matter names, which is how it will publish (--template and --variant still give a one-off look without touching any file). The template list shows a template's preview page, and templates use / show put preview_url and screenshots (up to eight, the first is the thumbnail) in the kit when the server has them; offline they are simply absent. The kit lists only the components a template offers, so form and page templates list none. SKILL: a document is written with article, the only document template for now; a page that must run uses principle; a template the user names is used as named. No menu and no variant, and the template stays fixed once written unless the user asks to change it. A résumé is written as an article for now.

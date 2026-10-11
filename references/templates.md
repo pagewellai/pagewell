@@ -31,13 +31,30 @@ an explicit request for a different template changes it.
 
 ### What it will look like
 
-The server can attach a **preview page** and **screenshots** to each template
-(`preview_url`, `screenshots`, `thumbnail_url` in `templates list --json`, and
-`template.preview_url` / `template.screenshots` in `templates use` / `show`).
+Every listed template has a **preview page** and **screenshots**, and both are
+generated, never hand-made, so they match what you will produce today:
+
+- The preview page is a live page rendered from the template's first sample on
+  every visit — `https://pagewell.ai/templates/<id>`, for Article
+  https://pagewell.ai/templates/article. It is `preview_url` in
+  `templates list --json` and `template.preview_url` in `templates use` / `show`.
+- The screenshots are that page on a desktop (1280 × 800) and on a phone
+  (390 × 844), retaken for every release: `screenshots` / `thumbnail_url` (the
+  first one) in the listing, `template.screenshots` in the kit.
+- **This skill carries them too**, with the samples, in
+  `assets/templates/<id>/`: `desktop.webp`, `phone.webp` and `samples/*.md`.
+  They work offline — use them when the network is not there or when your
+  interface can show a local image.
+
 When someone asks what they will get before you have written anything, hand
 over the preview link or a screenshot. They are pictures of what is coming, not
-options to choose between. Offline they are simply absent — that is not an
-error, and there is nothing to retry.
+options to choose between. Online fields that are absent (offline, or an older
+server) are not an error, and there is nothing to retry — the files in
+`assets/` are still there.
+
+Before your first document with a template, read one of its samples
+(`assets/templates/<id>/samples/`, or `pagewell templates samples <id>`): it is
+the shape a finished draft has, and a better guide than any description.
 
 ## The built-in templates
 

@@ -2,7 +2,7 @@
 
 The [PageWell](https://pagewell.ai) skill for coding agents, and the CLI it
 drives. An agent with this skill can write a document that looks designed — an
-article, a résumé, a report, a handbook — or a single-page interactive
+article, a report, a handbook — or a single-page interactive
 artifact, check it against the template's own rules, and publish it as a link:
 a page of its own at `p.pagewell.ai/s/…`, a share link, a share code, or a
 single HTML file that opens offline.
@@ -20,8 +20,9 @@ each of them:
 npx skills add pagewellai/pagewell-skill -g
 ```
 
-By hand: this repository **is** the skill — `SKILL.md` sits at its root and
-the `references/` next to it are what the agent loads on demand — so clone
+By hand: this repository **is** the skill — `SKILL.md` sits at its root, the
+`references/` next to it are what the agent loads on demand, and `assets/`
+holds each template's screenshots and samples — so clone
 it into the directory your agent reads (`--depth 1`: the skill is a few
 files; the history is not):
 
@@ -49,7 +50,7 @@ this machine needs from the `binaries` branch and verifies it against
 Every activation starts with a read-only check for both halves:
 
 ```bash
-pagewell doctor --json --skill-version v0.5.0
+pagewell doctor --json --skill-version v0.6.0
 ```
 
 If either half is behind, the JSON includes the exact next command. The manual
@@ -115,7 +116,7 @@ it executable. Nothing else is downloaded and nothing is compiled.
 
 ```bash
 pagewell doctor                       # installed? reachable? signed in?
-pagewell templates list --kind doc    # what kinds of page there are
+pagewell templates list               # the templates there are
 pagewell templates use article -o draft.md
 pagewell check draft.md               # the template's own rules, offline
 pagewell preview                      # the page as it will render, offline

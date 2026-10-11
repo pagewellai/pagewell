@@ -13,7 +13,7 @@ description: >
   published, and for turning a finished piece into an X (Twitter) Article
   draft — "post this on X", "make it an X article", "发到 X 长文".
 metadata:
-  version: "v0.5.0"
+  version: "v0.6.0"
 ---
 
 # PageWell
@@ -59,7 +59,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.5.0
+0  pagewell doctor --json --skill-version v0.6.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -114,10 +114,16 @@ material:
 | `checks` | What `pagewell check` will hold you to |
 | `rubric` | Questions to ask yourself before handing over |
 
-`template.preview_url` and `template.screenshots` (when the server has them)
-show a finished page made with this template. If they ask what it will look
-like before anything is written, give them that link or a screenshot — as a
-picture of what is coming, not as a choice between looks.
+**What it will look like.** This skill carries each template's screenshots and
+samples in `assets/templates/<id>/`: `desktop.webp` and `phone.webp` are the
+template's preview page, `samples/*.md` are finished documents written with it.
+The preview page itself is `template.preview_url` — for Article,
+https://pagewell.ai/templates/article, rendered live from the first sample. If
+they ask what it will look like before anything is written, give them that
+link, or show `desktop.webp` if your interface can display an image — as a
+picture of what is coming, not as a choice between looks. Before your first
+document with a template, read one of its samples: it is the shape a finished
+draft has.
 
 ⛔ **Do not invent facts to fill a required input.** No work history, no numbers,
 no quotations, no client names. If the user says "just write something", use the
