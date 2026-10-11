@@ -1,34 +1,48 @@
 ---
 name: pagewell
 description: >
-  Write and publish a document that looks designed — an article, a resume, a
-  report, a one-pager, a handbook — or a single-page artifact that runs in the
-  browser: a principle explainer, a playground, a converter. Hand back a link,
-  a share code, or a single HTML file. Use when the user says "write me an
-  article", "make a resume", "turn this into a nice document", "explain how X
-  works with a demo", "make a page that shows the mechanism", "share these
-  docs", "publish this", or the equivalent in any language, including
-  "写篇文章", "做份简历", "原理演示", "讲解页", "做一个能拖的说明".
-  Also for picking or writing a template, for charts and interactive blocks
-  inside a document, for managing what was already published, and for turning
-  a finished piece into an X (Twitter) Article draft — "post this on X",
-  "make it an X article", "发到 X 长文".
+  Write and publish a document that looks designed — an article, a report, a
+  one-pager, a handbook — or a single-page artifact that runs in the browser:
+  a principle explainer, a playground, a converter. Hand back a link, a share
+  code, or a single HTML file. Use when the user says "write me an article",
+  "turn this into a nice document", "explain how X works with a demo", "make a
+  page that shows the mechanism", "share these docs", "publish this", or the
+  equivalent in any language, including "写篇文章", "原理演示", "讲解页",
+  "做一个能拖的说明". Also for writing a house template, for charts and
+  interactive blocks inside a document, for managing what was already
+  published, and for turning a finished piece into an X (Twitter) Article
+  draft — "post this on X", "make it an X article", "发到 X 长文".
 metadata:
-  version: "v0.4.0"
+  version: "v0.5.0"
 ---
 
 # PageWell
 
 A template here is not a stylesheet. It is **a kind of page**: a skeleton, a
-writing brief, the inputs you must collect before writing, and checks that tell
-you whether the draft is any good. There are two kinds. Your job is to pick
-one, read what it hands you, and follow it.
+writing brief, the inputs you must collect before writing, the components it
+gives you, and checks that tell you whether the draft is any good. Your job is
+to take the one the request calls for, read what it hands you, and follow it.
+
+**The request decides the template. Never offer a menu, never offer looks.**
+
+| They asked for | Template |
+|---|---|
+| any document — an article, a post, a report, a guide, a one-pager | `article` (the only document template for now) |
+| a page where the reader must see a mechanism work | `principle` (a running page, below) |
+| a template by name (their own house template, say) | that one |
+
+A résumé gets its own template later. Until then write it with `article` and
+say in one line that it is laid out as an article.
+
+Once the draft exists, **the template is fixed**: it is in the file's front
+matter, `pagewell preview` shows exactly that, and you do not switch it or set
+a `variant:`. Change it only if they explicitly ask for a different template.
 
 ## Classify first
 
 **If JavaScript is off, is there still an article to read?**
 
-| Yes | `doc` — Markdown (or the template's form fields). A demo inside it is an `embed`. |
+| Yes | `doc` — Markdown, written with `article`. A demo inside it is an `embed`. |
 | No, the page *is* the thing | `artifact` — one self-contained HTML file. Always sandboxed. |
 
 Do not ask "is this a tool or an explainer". That is a template, not a kind.
@@ -45,7 +59,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.4.0
+0  pagewell doctor --json --skill-version v0.5.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -55,35 +69,31 @@ text and the CLI; do not wait for the user to ask whether an update exists.
 0b Classify: document or artifact (a running page)
 
 ── document ──
-1  pagewell templates list --json
-2  Offer up to 3, one clause each on why. → references/templates.md
-3  pagewell templates use <id> -o draft.md
-4  COLLECT EVERY REQUIRED INPUT before writing a word
-5  Write draft.md. Replace every ⟦…⟧.
-6  pagewell check draft.md --json
+1  pagewell templates use article -o draft.md       (or the template they named)
+2  COLLECT EVERY REQUIRED INPUT before writing a word
+3  Write draft.md. Replace every ⟦…⟧.
+4  pagewell check draft.md --json
      errors  → fix, re-run. Three rounds, then stop and ask.
      warnings→ read them out; they are opinions, not blockers
-7  Read the rubric against your own draft
-8  pagewell preview
+5  Read the rubric against your own draft
+6  pagewell preview                    exactly what publishing will produce
 
 ── artifact ──
-1  pagewell templates list --json          (pick one with mode: artifact)
-2  Offer up to 3. Default is `principle` when they want a mechanism visible.
-3  pagewell templates use <id> -o page.html
-4  COLLECT EVERY REQUIRED INPUT before writing a word
-5  Write ONE html file. Replace every ⟦…⟧.
+1  pagewell templates use principle -o page.html
+2  COLLECT EVERY REQUIRED INPUT before writing a word
+3  Write ONE html file. Replace every ⟦…⟧.
      No second page. No fetch. No form. State stays in memory.
-6  pagewell check page.html --json     same three-round rule
-7  Read the rubric. First frame must work with JS off (noscript).
-8  pagewell preview                    the page itself, not an article shell
+4  pagewell check page.html --json     same three-round rule
+5  Read the rubric. First frame must work with JS off (noscript).
+6  pagewell preview                    the page itself, not an article shell
 
 ── then ──
-9  Publish, or export one HTML file. Already have one? `pagewell publish <file>`
+7  Publish, or export one HTML file. Already have one? `pagewell publish <file>`
    Want it on X as well? `pagewell x draft draft.md` (§Sending to X)
-10 Report: kind, template, what you checked, what you had to make up
+8  Report: what you made, what you checked, what you had to make up
 ```
 
-Steps 4, 6 and 7 are what separate a draft that lands from one that reads like
+Steps 2, 4 and 5 are what separate a draft that lands from one that reads like
 filler. Do not skip them because the piece seems short.
 
 Writing, checking and exporting need **no account and no network**. Sign in only
@@ -104,6 +114,11 @@ material:
 | `checks` | What `pagewell check` will hold you to |
 | `rubric` | Questions to ask yourself before handing over |
 
+`template.preview_url` and `template.screenshots` (when the server has them)
+show a finished page made with this template. If they ask what it will look
+like before anything is written, give them that link or a screenshot — as a
+picture of what is coming, not as a choice between looks.
+
 ⛔ **Do not invent facts to fill a required input.** No work history, no numbers,
 no quotations, no client names. If the user says "just write something", use the
 input's `fallback` and **say in your report what you made up**.
@@ -118,9 +133,6 @@ Markdown, plus two syntaxes for components:
 
 The tool kit gives a copy-ready `syntax` per component. Details and the full
 component list: `references/components.md`.
-
-Form-mode templates (resumes, one-pagers) put the **whole document in the front
-matter** and have no body. The skeleton says so and lists the fields.
 
 An **artifact** is one HTML file. Metadata is `<meta name="pagewell:*">`.
 In-page `#anchors` and in-page state are fine; another `.html` is not. Details:
@@ -157,7 +169,7 @@ No network, no login, fast enough to run after every section. Each issue has a
 - `warnings` — read them out. They are the template's opinion, and the user may
   disagree. Do not silently satisfy one by cutting content.
 - Three rounds without reaching zero errors: **stop.** List what is left and ask
-  which requirement to relax. Never switch templates quietly.
+  which requirement to relax. Never switch templates to get around a check.
 
 Then read the `rubric` against your own draft. It catches what rules cannot.
 
@@ -321,6 +333,8 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 
 | Situation | What to do |
 |---|---|
+| Choosing a template | The request decides: `article` for any document, `principle` for a running page, or the one they name. **No menu, no variant.** Once written it stays — the preview shows exactly the file |
+| They want a résumé | `article` for now; say in one line that it is laid out as an article |
 | Using a `doc` template | Write **Markdown or the template's front-matter fields** |
 | Using an `artifact` template | Write **one HTML file**. No second page, no `fetch`, no `<form>` |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
@@ -334,7 +348,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | `x_not_connected` | Read out the link in the hint (or from `pagewell x connect`); they open it and click Allow in their own browser. Never open it or approve it for them |
 | Sending to X | `pagewell x draft` makes a **draft** only. Say it is waiting in X → Articles → Drafts; never say it was posted. Read every warning out |
 | Publishing one file | `pagewell publish` is public and searchable by default and does not create or join a visible Space. Read `searchable` back — the owner may have turned indexing off for their account or space. Use `--no-index` when they want it public but out of search engines; `--space` only when explicitly requested; `--visibility unlisted|code|password` only for an explicitly restricted share |
-| `engine_outdated` | `pagewell upgrade`, then retry. Do not fall back to another template — they picked that one |
+| `engine_outdated` | `pagewell upgrade`, then retry. Do not fall back to another template — the template stays what it is |
 | `save` on a template other documents follow | Say so first; it reaches every document tracking `@^major` |
 | `--prune` would delete things | List the exact paths, get explicit agreement, only then `--yes` |
 | `conflict` | Show what changed and ask "overwrite" or "pull first". **Never decide to overwrite on your own** |
@@ -350,8 +364,8 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 
 ## What to say at the end
 
-1. **Which kind, template and variant, and why** — one clause. For an artifact,
-   also say it is one page, sandboxed, and cannot reach the network.
+1. **What you made** — an article, or a running page. For a running page, also
+   say it is one page, sandboxed, and cannot reach the network.
 2. **What you checked** — "5 sections, 1,420 words, summary 98 characters, all
    3 images have alt text". The user does not know these checks exist; this
    sentence is how they learn what they are getting.
@@ -367,7 +381,7 @@ This file is the whole normal flow. Load one of these only when you hit it:
 | Read | When |
 |---|---|
 | `assets.md` | images, PDFs, uploading files, publishing one HTML you already have |
-| `templates.md` | picking, writing or changing a template |
+| `templates.md` | which template a request gets, writing a house template |
 | `components.md` | building a component, or one is not doing what you meant |
 | `artifact.md` | writing a running page: single-file contract, checks, vs embed |
 | `libraries.md` | diagrams, formulas, interactive charts, animation, `embed` |

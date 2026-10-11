@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.5.0 — 2026-10-11
+
+Templates now follow what the user asks for instead of a menu. pagewell preview has no template or variant pickers and no longer reads ?theme=, ?variant= or the pw_theme cookie: every document is shown with the template its own front matter names, which is how it will publish (--template and --variant still give a one-off look without touching any file). The template list shows a template's preview page, and templates use / show put preview_url and screenshots (up to eight, the first is the thumbnail) in the kit when the server has them; offline they are simply absent. The kit lists only the components a template offers, so form and page templates list none. SKILL: a document is written with article, the only document template for now; a page that must run uses principle; a template the user names is used as named. No menu and no variant, and the template stays fixed once written unless the user asks to change it. A résumé is written as an article for now.
+
+Source commit `60584ce`. Update with `pagewell upgrade`.
+
 ## v0.4.0 — 2026-10-11
 
 Public pages can now stay out of search engines. pagewell publish --no-index makes the page public but marks it noindex and keeps it off the sitemap and Explore; pagewell visibility <node-id> public --index off|on|inherit changes it for an existing page. searchable in the JSON now reports what the server resolved (page, then space, then account) instead of always true. SKILL: publishing and references/cli.md explain the switch; the README gains a 'Send an article to X' section.

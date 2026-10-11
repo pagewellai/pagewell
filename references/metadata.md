@@ -9,8 +9,7 @@ summary: Up and running in three steps
 tags: [guide, setup]
 icon: 📦
 order: 1
-template: article            # a template; leave it out for the platform look
-variant: warm                # a named set of token overrides, if it has any
+template: article            # written by `templates use`; stays what it is
 libs: [katex]                # only for $…$ maths; a ```mermaid or ```math fence enables its library itself
 token.accent: indigo         # override one token for this document only
 locale: en
@@ -18,11 +17,16 @@ translation_group: guide/install
 ---
 ```
 
-`template:` names a **template** (`article`, `resume`, `principle`). A template
-brings its look plus a skeleton, a brief, required inputs and checks. Leave it
-out for the platform's own look. Old names (`magazine-article`, `editorial`,
-`whitepaper`...) still resolve to a template and variant; `pagewell check` tells
-you the new name.
+`template:` names a **template** — today `article` for every document, or
+`principle` for a running page (`references/templates.md` says which a request
+gets). A template brings its look plus a skeleton, a brief, required inputs,
+the components it gives you and checks. `templates use` writes this line; do not
+change it afterwards unless they ask for a different template. A file without
+it gets the platform's own look (a documentation tree pushed as-is).
+
+Do not add `variant:`. Older documents may carry one, or an old name
+(`magazine-article`, `editorial`, `whitepaper`...) that resolves to a template
+and variant; those keep working, and `pagewell check` tells you the new name.
 
 Pin a version with `template: article@3.0.0`, or follow the major with
 `@^3`. **The default is pinned**: a published piece should not change while its
@@ -36,9 +40,10 @@ should be an explicit decision. See `libraries.md`.
 an error, not a silent no-op — `pagewell templates list --json` returns the
 vocabulary.
 
-**Form-mode templates put the whole document in the front matter.** A resume has
-no body at all: `name`, `contact`, `sections`, `sidebar` and so on are fields,
-and the layout is the template's. The skeleton `templates use` writes lists them.
+Older documents may use `template: resume`, a form: the whole document is in the
+front matter (`name`, `contact`, `sections`, `sidebar`…) and there is no body.
+Edit the fields; do not convert it. New résumés are written with `article` until
+the résumé template returns.
 
 `title` wins over the filename. `summary` falls back to the first ~200
 characters of body text.

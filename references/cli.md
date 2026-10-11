@@ -271,8 +271,7 @@ collection — the answer to "I deleted things and nothing changed".
 ## preview
 
 ```
-pagewell preview [--source DIR] [--port 4321] [--template ID] [--variant V]
-                 [--once] [--open] [--json]
+pagewell preview [--source DIR] [--port 4321] [--once] [--open] [--json]
 ```
 
 Renders the tree locally, with the same code the server uses, and serves it.
@@ -328,9 +327,14 @@ the one the user opened is the worst kind of confusion.
 
 What is shared with the published page: the document body, the stylesheet, the
 design snapshot, the components, the charts. What is not: the chrome around it.
-Preview has a template picker, a variant picker and a banner; it has no share
-links, no fork, no permissions. Do not tell the user a preview URL is
-shareable — it is bound to their machine.
+Preview has a banner; it has no share links, no fork, no permissions — and no
+template or variant picker. Each page renders with the template in its own
+front matter, so what the user sees is what publishing produces. Do not tell
+the user a preview URL is shareable — it is bound to their machine.
+
+(`--template` and `--variant` still exist for old scripts: they change only what
+this one run shows, never the files. Do not use them — the template is decided
+when the draft is written.)
 
 `embed` blocks do not run in local preview: they need an isolated registrable
 origin with a signed URL, which a laptop cannot produce. The poster and title
@@ -342,8 +346,8 @@ after deploying.
 
 ```
 templates list [--kind template|components] [--category c] [--lang l] [--mine] [--json]
-templates show <id> [--full] [--variant v] [--json]
-templates use <id> [--variant v] [--title t] [-o FILE] [--json]
+templates show <id> [--full] [--json]
+templates use <id> [--title t] [-o FILE] [--json]
 templates samples <id> [--source <sample-id>]
 templates preview <id> [--variant v]
 
@@ -368,6 +372,12 @@ included — context is money.
 
 `use` is `add` + `show` + `scaffold` in one call, and writes a skeleton with
 `⟦…⟧` placeholders. It refuses to overwrite an existing file.
+
+Both also carry `template.preview_url` and `template.screenshots` when the
+server has them: a finished page made with this template, for someone who asks
+what they will get. `templates list --json` carries the same as `preview_url`,
+`screenshots` and `thumbnail_url` (the first screenshot). Offline, or against an
+older server, they are absent — not an error.
 
 `validate` loads a working copy, renders every sample and runs the template's
 own checks. **It fails on a doc template with no sample** — a template that

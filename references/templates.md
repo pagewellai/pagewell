@@ -4,49 +4,53 @@ A template is **data, not code**: a directory the renderer interprets. That is
 why a template you fetched renders identically on your laptop and on the server,
 and why anyone can write one without shipping executable logic to a reading page.
 
-## Picking one for someone
+## Which template a request gets
 
-```
-pagewell templates list --json [--category article|resume|explainer] [--lang zh]
-```
+**The request decides. Do not offer a menu, do not offer looks.**
 
-There are two kinds of thing: **templates** (a kind of document: its look, its
-skeleton, its brief, its checks) and **components** (blocks any document can
-use). There is no separate "theme" — a template carries its own look.
+| They asked for | Template |
+|---|---|
+| any document — article, post, report, guide, one-pager, handbook page | `article` |
+| a page where the reader must see a mechanism work (artifact mode) | `principle` |
+| a template by name — their own house template, say | that one |
+| a résumé | `article` for now, and say so in one line. A résumé template with its own components comes later |
 
-**Read that rather than a list you remember.** Templates install per machine and
-get published continuously; a list carried in your head goes stale.
+That is the whole decision. `pagewell templates list --json` still lists
+everything installed (including `resume`); that list is for someone who asked
+what exists, not a menu to read out.
 
-Offer **at most three**, one clause each on why, then say which you would pick.
-People do not know these exist, and "I'd use `article` with the `magazine`
-variant — it has a cover and pull quotes, which suits a piece this long" is how
-they find out they can change it.
+Templates differ in **the components they give you**, not in a choice of looks.
+`templates use <id>` lists exactly those components, each with a syntax to copy.
+Read that list rather than one you remember — templates change between releases.
 
-Let them look before choosing:
+**Once the draft exists the template is fixed.** `templates use` writes
+`template:` into the front matter; `pagewell preview` renders exactly that and
+has no template or variant picker, so what the user sees is what gets
+published. Do not set `variant:` and do not switch templates afterwards — only
+an explicit request for a different template changes it.
 
-```
-pagewell templates preview <id>     # renders the template's own sample locally
-pagewell templates samples <id>     # real documents built with it
-```
+### What it will look like
 
-`--variant` picks a named colour/type variation. Say which one you used.
-
-Offline (`offline: true` in the JSON) you get the built-ins plus whatever is
-installed locally. That is a usable answer — do not stop and ask the user for
-a network.
+The server can attach a **preview page** and **screenshots** to each template
+(`preview_url`, `screenshots`, `thumbnail_url` in `templates list --json`, and
+`template.preview_url` / `template.screenshots` in `templates use` / `show`).
+When someone asks what they will get before you have written anything, hand
+over the preview link or a screenshot. They are pictures of what is coming, not
+options to choose between. Offline they are simply absent — that is not an
+error, and there is nothing to retry.
 
 ## The built-in templates
 
-| id | variants | Reach for it when |
-|---|---|---|
-| *(none)* | — | a documentation site or a plain page: the platform look, tree of pages on the left, outline on the right |
-| `article` | `magazine` `paper` `plain` `bold` | one long piece: lead, sections, key points, author card. `magazine` adds a full-bleed cover, drop cap, numbered sections and pull quotes; `paper` is larger type and wider leading for printing; `plain` draws no lines at all |
-| `resume` | `classic` *(default)* `modern` `forest` `clay` | a one-page CV. `classic` is one column and no colour (tracker-friendly); the others add a second column, an accent rail and an optional photo |
-| `principle` | — | a running page that makes a mechanism visible (artifact mode, always sandboxed) |
+| id | Reach for it when |
+|---|---|
+| `article` | every document: lead, sections, key points, author card. Its components are whatever `templates use article` lists |
+| `principle` | a running page that makes a mechanism visible (artifact mode, always sandboxed) |
+| `resume` | installed, but not offered yet — do not pick it |
+| *(none)* | a documentation tree pushed as-is: the platform look, tree of pages on the left, outline on the right. You do not choose this; it is what files without `template:` get |
 
 `magazine-article`, `resume-classic`, `resume-modern` and the old theme names
-(`editorial`, `whitepaper`, `ink`, `note`, `manual`) still resolve — they map to
-the templates above — but write the new name.
+(`editorial`, `whitepaper`, `ink`, `note`, `manual`) still resolve on documents
+that already use them. Do not write them in new ones.
 
 Every template uses the platform's one type pairing (Open Sans + Noto Sans CJK);
 there is no serif template. Dark mode is automatic: it follows the reader's
@@ -69,14 +73,6 @@ Do not build either control into a document, and do not promise a particular
 appearance: "it will look dark" is not something you can say. The document must
 remain correct without JavaScript; in that state it uses the template measure
 and the reader's system color scheme.
-
-To look at one across a whole tree without editing anything:
-
-```
-pagewell preview --template article --variant paper
-```
-
-That flag is for looking only. It changes no file and does not affect `push`.
 
 ## Two kinds
 

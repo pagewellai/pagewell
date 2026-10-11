@@ -53,7 +53,7 @@ Every document has these unless its template says otherwise.
 | `profile` | fence | the author |
 | `cta` | fence | one action. Never two — a second halves the first |
 | `chart` | fence | seven chart types, rendered on the server. See `charts.md` |
-| `resume` | fence | a CV inside a longer document |
+| `resume` | fence | belongs to the résumé template, which is not offered yet. An article does not use it |
 | `embed` | fence | a block that runs your own code. See `libraries.md` |
 
 `pagewell templates show <id> --json` returns the exact list this template
