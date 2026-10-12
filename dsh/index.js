@@ -9,7 +9,7 @@
  * the first time it is needed (scripts/install.sh).
  *
  * Plain ESM with no dependencies and no build step, on purpose:
- * `dsh plugin add github:pagewellai/pagewell-skill` fetches sources, not build
+ * `dsh plugin add github:pagewellai/pagewell` fetches sources, not build
  * output, and a `prepare` script would make every user allowlist a build before
  * the first install works. It does not reuse `@deepseek-ai/dsh-skill-filesystem`
  * either: that provider discovers `<root>/<name>/SKILL.md`, and this package is

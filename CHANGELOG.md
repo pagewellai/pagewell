@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.7.1 — 2026-10-12
+
+The repository is now github.com/pagewellai/pagewell (renamed from pagewell-skill). The old address keeps redirecting, so existing installs and older CLIs keep working unchanged. Install with `npx skills add pagewellai/pagewell -g`, or in DeepSeek Harness with `dsh plugin --profile web add github:pagewellai/pagewell`; the plugin package name stays pagewell-skill. pagewell doctor and pagewell upgrade now name the new address in their update commands. The Article template's desktop screenshot is refreshed: on article pages the outline on the right now mirrors the article's left margin, so both margins are equal at every window width.
+
+Source commit `64400c5`. Update with `pagewell upgrade`.
+
 ## v0.7.0 — 2026-10-12
 
 PageWell is now also a DeepSeek Harness plugin: package.json declares a dsh.bundle and dsh/index.js registers this same SKILL.md with dsh's skill registry, so `dsh plugin --profile web add github:pagewellai/pagewell-skill` (or the Plugins page) installs it. pagewell auth login --device-code <device_code> waits for the code an earlier --wait=false printed; before, a second auth login started a new code and the one the user approved was never collected. A sign-in that cannot store its token (an agent sandbox limited to the project) now stops with credentials_unwritable before starting or polling a code, instead of failing after approval and leaving an unused token behind. Hosted libraries are embedded even when the local cache cannot be written, and export only says the file opens with no network when nothing is missing. doctor and upgrade name the dsh plugin update when the skill came from it. SKILL: the description fits dsh's 500-character catalog, sign-in waits with --device-code, and sandboxed harnesses are told which commands need wider permission.

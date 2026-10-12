@@ -9,10 +9,10 @@ set -euo pipefail
 
 # Substituted when the bundle is published. Seeing @@…@@ below means you are
 # looking at the template in the source repository, not at a published copy.
-REPO_SLUG="pagewellai/pagewell-skill"
+REPO_SLUG="pagewellai/pagewell"
 BRANCH="main"          # the skill text (this file lives there)
 BIN_BRANCH="binaries"  # the binaries — a separate branch, replaced whole on every release
-VERSION="v0.7.0"
+VERSION="v0.7.1"
 
 BIN_DIR="${PAGEWELL_BIN_DIR:-$HOME/.local/bin}"
 # Where bin/<asset>, bin/SHA256SUMS and version.json are fetched from. The skill

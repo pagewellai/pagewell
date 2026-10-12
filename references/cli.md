@@ -27,7 +27,7 @@ published release. When `available` is true, run `command` and re-read SKILL.md.
 For the global install shown in the README the command is
 `npx skills update pagewell -g -y`. Inside DeepSeek Harness, with the skill
 installed as a plugin (the profile in `DSH_PROFILE` lists `pagewell-skill`), it
-is `dsh plugin --profile <profile> add github:pagewellai/pagewell-skill`. That
+is `dsh plugin --profile <profile> add github:pagewellai/pagewell`. That
 needs `dsh` and `pnpm` on PATH (for the `desktop` profile, the `dsh` command
 the desktop app installs); when they are not there or the command fails, the
 user updates PageWell from the Plugins page instead.

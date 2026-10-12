@@ -17,7 +17,7 @@ One command, any agent — it finds the agents on this machine and installs into
 each of them:
 
 ```bash
-npx skills add pagewellai/pagewell-skill -g
+npx skills add pagewellai/pagewell -g
 ```
 
 By hand: this repository **is** the skill — `SKILL.md` sits at its root, the
@@ -28,12 +28,12 @@ files; the history is not):
 
 | Agent | User-level | Inside a project |
 |---|---|---|
-| Claude Code | `git clone --depth 1 https://github.com/pagewellai/pagewell-skill ~/.claude/skills/pagewell` | `.claude/skills/` |
-| Codex | `git clone --depth 1 https://github.com/pagewellai/pagewell-skill ~/.codex/skills/pagewell` | `.agents/skills/` |
-| Cursor | `git clone --depth 1 https://github.com/pagewellai/pagewell-skill ~/.cursor/skills/pagewell` | `.agents/skills/` |
-| Gemini CLI | `git clone --depth 1 https://github.com/pagewellai/pagewell-skill ~/.gemini/skills/pagewell` | `.agents/skills/` |
-| GitHub Copilot | `git clone --depth 1 https://github.com/pagewellai/pagewell-skill ~/.copilot/skills/pagewell` | `.github/skills/` or `.agents/skills/` |
-| Windsurf | `git clone --depth 1 https://github.com/pagewellai/pagewell-skill ~/.codeium/windsurf/skills/pagewell` | `.windsurf/skills/` |
+| Claude Code | `git clone --depth 1 https://github.com/pagewellai/pagewell ~/.claude/skills/pagewell` | `.claude/skills/` |
+| Codex | `git clone --depth 1 https://github.com/pagewellai/pagewell ~/.codex/skills/pagewell` | `.agents/skills/` |
+| Cursor | `git clone --depth 1 https://github.com/pagewellai/pagewell ~/.cursor/skills/pagewell` | `.agents/skills/` |
+| Gemini CLI | `git clone --depth 1 https://github.com/pagewellai/pagewell ~/.gemini/skills/pagewell` | `.agents/skills/` |
+| GitHub Copilot | `git clone --depth 1 https://github.com/pagewellai/pagewell ~/.copilot/skills/pagewell` | `.github/skills/` or `.agents/skills/` |
+| Windsurf | `git clone --depth 1 https://github.com/pagewellai/pagewell ~/.codeium/windsurf/skills/pagewell` | `.windsurf/skills/` |
 | Anything else | its skills directory | most also read `.agents/skills/` |
 
 You do not have to install the CLI yourself: the first time the agent needs it,
@@ -53,15 +53,15 @@ registers this same `SKILL.md` with dsh's skill registry. There is no second
 copy of the instructions, no build step and nothing to configure.
 
 ```bash
-dsh plugin --profile web add github:pagewellai/pagewell-skill        # the web UI
-dsh plugin --profile desktop add github:pagewellai/pagewell-skill    # the desktop app, with the dsh command it installs
+dsh plugin --profile web add github:pagewellai/pagewell        # the web UI
+dsh plugin --profile desktop add github:pagewellai/pagewell    # the desktop app, with the dsh command it installs
 ```
 
-Or install `github:pagewellai/pagewell-skill` from the Plugins page. The `pagewell` skill then
+Or install `github:pagewellai/pagewell` from the Plugins page. The `pagewell` skill then
 appears in the agent's skill catalog: ask for an article, a page or a link, or
 type `/pagewell`.
 
-Installed the skill with `npx skills add pagewellai/pagewell-skill -g` already? dsh reads
+Installed the skill with `npx skills add pagewellai/pagewell -g` already? dsh reads
 `~/.agents/skills` as well, so it has the skill without the plugin; with both,
 dsh uses the `~/.agents/skills` copy.
 
@@ -71,7 +71,7 @@ installing the CLI and adding a template write to your home directory
 (`~/.config/pagewell`, `~/.local/bin`, `~/.cache/pagewell`), so the agent
 asks to run that one command outside the sandbox: approve it in dsh, then
 approve the device code in your browser. To update, run the command
-`pagewell doctor` names (`dsh plugin --profile <profile> add github:pagewellai/pagewell-skill`),
+`pagewell doctor` names (`dsh plugin --profile <profile> add github:pagewellai/pagewell`),
 or update PageWell from the Plugins page.
 
 ## Updating
@@ -79,7 +79,7 @@ or update PageWell from the Plugins page.
 Every activation starts with a read-only check for both halves:
 
 ```bash
-pagewell doctor --json --skill-version v0.7.0
+pagewell doctor --json --skill-version v0.7.1
 ```
 
 If either half is behind, the JSON includes the exact next command. The manual
@@ -125,7 +125,7 @@ which always holds the current release only. What changed is in
 ## Install only the CLI
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/pagewellai/pagewell-skill/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/pagewellai/pagewell/main/scripts/install.sh | bash
 ```
 
 The installer reads `uname`, downloads the matching binary from the

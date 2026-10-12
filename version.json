@@ -1,9 +1,9 @@
 {
-  "version": "v0.7.0",
-  "commit": "826e131c0fe82362a7f35f7d751084285b2f7ac5",
-  "built_at": "2026-10-12T03:23:49Z",
+  "version": "v0.7.1",
+  "commit": "64400c5694034f9f785eb23bf48444d575fa9b23",
+  "built_at": "2026-10-12T04:39:12Z",
   "platforms": ["darwin/arm64","darwin/amd64","linux/amd64","linux/arm64","windows/amd64","windows/arm64"],
-  "install": "https://github.com/pagewellai/pagewell-skill",
-  "binaries": "https://raw.githubusercontent.com/pagewellai/pagewell-skill/binaries/bin/",
-  "changelog": "https://github.com/pagewellai/pagewell-skill/blob/main/CHANGELOG.md"
+  "install": "https://github.com/pagewellai/pagewell",
+  "binaries": "https://raw.githubusercontent.com/pagewellai/pagewell/binaries/bin/",
+  "changelog": "https://github.com/pagewellai/pagewell/blob/main/CHANGELOG.md"
 }

@@ -9,7 +9,7 @@ description: >
   ("写篇文章", "原理演示", "讲解页"); also for house templates, charts,
   managing published pages, and X Article drafts ("发到 X 长文").
 metadata:
-  version: "v0.7.0"
+  version: "v0.7.1"
 ---
 
 # PageWell
@@ -55,7 +55,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.7.0
+0  pagewell doctor --json --skill-version v0.7.1
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -374,7 +374,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | `conflict` | Show what changed and ask "overwrite" or "pull first". **Never decide to overwrite on your own** |
 | `unauthenticated` | Walk them into sign-in (§Signing in) — it doubles as sign-up. Do not fail silently, do not tell them to "register first" somewhere else |
 | A line on stderr says a newer pagewell is available | Finish the step you are on, then `pagewell upgrade` (and the `skill_update` command it prints, if any), then re-read SKILL.md if the text changed. Say so in one line; do not ask permission for a tool update, do ask before anything that touches their content |
-| `doctor.skill_update.available` is true | Run its `command` (normally `npx skills update pagewell -g -y`), then re-read SKILL.md before continuing. This updates instructions only; it does not touch the user's content. In DeepSeek Harness with the plugin it is `dsh plugin --profile … add github:pagewellai/pagewell-skill`; if `dsh` is not on PATH or the command fails, tell the user in one line to update PageWell from the Plugins page and carry on |
+| `doctor.skill_update.available` is true | Run its `command` (normally `npx skills update pagewell -g -y`), then re-read SKILL.md before continuing. This updates instructions only; it does not touch the user's content. In DeepSeek Harness with the plugin it is `dsh plugin --profile … add github:pagewellai/pagewell`; if `dsh` is not on PATH or the command fails, tell the user in one line to update PageWell from the Plugins page and carry on |
 | `doctor --skill-version` is unknown | The CLI predates automatic skill checks. Run `pagewell upgrade`, then repeat step 0 |
 | Storage is full | `pagewell usage --files 10 --json`. Suggest trash → the files marked unused → upgrade, in that order. Uploaded files count against the quota exactly like documents |
 | `plan_required` | A Free-plan limit (Spaces are Pro-only · 20 live shares · 2 agent tokens · no password shares · no sending to X) or a template above the plan. Say which one — the message names it — and offer the cheap way out first (keep it in Documents, revoke an unused share or token, or use `--mode code` instead of password); hand over `pagewell.ai/pricing` second. **Never complete a payment** |
