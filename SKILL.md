@@ -9,7 +9,7 @@ description: >
   ("写篇文章", "原理演示", "讲解页"); also for house templates, charts,
   managing published pages, and X Article drafts ("发到 X 长文").
 metadata:
-  version: "v0.7.1"
+  version: "v0.8.0"
 ---
 
 # PageWell
@@ -55,7 +55,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.7.1
+0  pagewell doctor --json --skill-version v0.8.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -84,7 +84,11 @@ text and the CLI; do not wait for the user to ask whether an update exists.
 6  pagewell preview                    the page itself, not an article shell
 
 ── then ──
-7  Publish, or export one HTML file. Already have one? `pagewell publish <file>`
+7  Publish: pagewell publish draft.md --json       → their Documents, images included
+     changing a page you already published → add --node <node_id> (same link)
+     not signed in → ASK: anonymous or sign in (§Signing in). Never pick for them
+     a Space only when the user named one. Never init / push to publish a piece
+   Or export one HTML file. Already have one? `pagewell publish <file>`
    Want it on X as well? `pagewell x draft draft.md` (§Sending to X)
 8  Report: what you made, what you checked, what you had to make up
 ```
@@ -177,7 +181,8 @@ Then read the `rubric` against your own draft. It catches what rules cannot.
 
 ## Images and files
 
-Write a relative path, put the file there, push with `--assets`:
+Write a relative path, put the file there, and `pagewell publish` uploads it with
+the page:
 
 ```markdown
 ![Architecture](img/arch.png)
@@ -185,17 +190,37 @@ Write a relative path, put the file there, push with `--assets`:
 ```
 
 The path is resolved relative to the document. `check` and `preview` both tell
-you when the file is not actually there. Types, limits and the console upload:
-`references/assets.md`.
+you when the file is not actually there; `publish` lists anything it could not
+take in `missing_assets` (outside the document's folder, hidden, a type it does
+not take, not found) — read those out. Anonymous publishing is one file, so it
+refuses a document with local images and names them. Types, limits and the
+console upload: `references/assets.md`.
 
 ## Signing in (and signing up — it is the same door)
 
-The first time they want the CLI to create a persistent link, `publish` / `push` /
-`share` will answer `unauthenticated`. That is not a failure to report; it is the
-moment to say what is needed and start it:
+When they want a link and are not signed in — `doctor` says
+`"authenticated": false`, or `publish` answers `unauthenticated` — **ask which
+they want, then wait for the answer.** Never pick for them:
 
-> To give you a persistent link I need a PageWell account — it's free (128 MiB
-> for documents; Spaces are a Pro feature).
+> You're not signed in to PageWell, so there are two ways to publish this:
+> - **Anonymously** — no account; a link that disappears after 24 hours (one
+>   file up to 1 MiB, no local images, five a day).
+> - **Sign in** — free; the page stays in your Documents with an address of its
+>   own, and you can update or share it later. A new email creates the account.
+>
+> Which would you like?
+
+Anonymous:
+
+```
+pagewell publish draft.md --anonymous --json   # one file; refuses local images and names them
+```
+
+Say it disappears at `expires_at` and that nobody can update it — publishing
+again makes a new link. Do not call it persistent.
+
+Sign in — start it, show the link and the code:
+
 > I'll start the sign-in: open **pagewell.ai/device**, enter **WDJH-4KQP**, and
 > sign in with Google, GitHub or your email. A new email creates the account on the spot.
 
@@ -223,12 +248,11 @@ around it.
 
 Signing in with an address that has no account **creates one** — there is no
 separate registration step to send them to. Once approved, say whose account it
-is ("Signed in as liu@example.com") and carry on with what they asked for.
+is ("Signed in as liu@example.com") and carry on with what they asked for:
+`pagewell publish`.
 
-If they explicitly want a temporary link without an account, point them to the
-uploader on `pagewell.ai`: guest uploads are at most 1 MiB, limited to five per
-IP per UTC day, and disappear after 24 hours. Do not describe that link as
-persistent.
+Ask once per conversation: once they have chosen, keep to it until they say
+otherwise.
 
 ⛔ You show the link and the code. You never open the browser, click approve,
 or ask for a password or a verification code — approval only accepts a session
@@ -239,21 +263,29 @@ revoke it any time under **Settings → Agent tokens**.
 
 ## Publishing, or one file
 
-Already have a finished HTML page — a Claude artifact, a generated report?
-**One call, one link:**
+`pagewell publish` is how a piece gets published — the article you just wrote,
+or a finished HTML page they already have (a Claude artifact, a generated
+report). **One call, one link:**
 
 ```
+pagewell publish draft.md --json
 pagewell publish report.html --json
 cat report.html | pagewell publish - --title "Q3 review" --json
 ```
 
-It uploads into the account's internal **Documents** container (not a user-visible
-Space), pulls the inline base64 images out into files of their own, makes the page
-public and searchable (unless the owner turned search indexing off — `searchable` in
-the JSON says which), and prints its stable URL. Pass `--space` only when the Pro
-owner explicitly wants the page inside a Space. **Read `render_mode` out loud**:
-an artifact always sandboxes, so search engines get the summary and not the body.
+It goes into the account's **Documents** (the Documents list in their workbench —
+not a Space), together with the local images and files the document references;
+it pulls inline base64 images out into files of their own, makes the page public
+and searchable (unless the owner turned search indexing off — `searchable` in the
+JSON says which), and prints its stable URL. **Read `render_mode` out loud**: an
+artifact always sandboxes, so search engines get the summary and not the body.
 For an article, write Markdown.
+
+**Every `publish` makes a new page** — it never replaces another one, even when
+two drafts share a file name. To change a page you already published (they ask
+for a fix afterwards), pass the `node_id` from that publish's JSON, or the page's
+link: `pagewell publish draft.md --node <node_id> --json`. The link stays the
+same. Without `--node` you make a second page.
 
 Publishing is public/searchable by default. When the user wants it public but out
 of search engines (a résumé, a page only for people who get the link), add
@@ -273,10 +305,17 @@ and summary to search; its iframe body is not indexed. Use
 `--visibility unlisted|code|password` only when the user explicitly asks for a
 restricted share instead of normal publishing. `--no-share` uploads privately.
 
-For a directory you keep in sync:
+**A Space only when the user names one.** Spaces are a Pro feature the owner
+manages. Never put a piece into one, and never create one, unless they asked for
+it by name — "put it in my Handbook space". Then find it with `pagewell spaces`
+and `pagewell publish draft.md --space <id> --json`. `pagewell init` creates a
+Space only with an explicit `--title` (the name they gave you) and refuses
+otherwise; `push` needs a Space it is told about.
+
+To keep a folder in sync with a Space they named:
 
 ```
-pagewell auth login --json --wait=false    # read the URL + code out, then wait (§Signing in)
+pagewell init --space <id> --json          # the Space they named (or --title "<name>" for a new one they asked for)
 pagewell push --dry-run --json             # read the diff and usage first
 pagewell push --assets --json              # --assets uploads images too
 pagewell share create <path> --mode <mode> --expire <d> --allow <perms> --json
@@ -367,19 +406,21 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | A sandbox denies a write (`operation not permitted`, `credentials_unwritable`) | Only commands that write to the home directory need it: `auth login` (waiting), `auth logout`, `upgrade`, `scripts/install.sh`, `templates add`/`new`/`fork`/`edit`, `brand`. Rerun that exact command with the harness's one-command permission and a one-sentence reason. Writing, checking, previewing, exporting and publishing need none. Never move credentials or caches into the project |
 | `x_not_connected` | Read out the link in the hint (or from `pagewell x connect`); they open it and click Allow in their own browser. Never open it or approve it for them |
 | Sending to X | `pagewell x draft` makes a **draft** only. Say it is waiting in X → Articles → Drafts; never say it was posted. Read every warning out |
-| Publishing one file | `pagewell publish` is public and searchable by default and does not create or join a visible Space. Read `searchable` back — the owner may have turned indexing off for their account or space. Use `--no-index` when they want it public but out of search engines; `--space` only when explicitly requested; `--visibility unlisted|code|password` only for an explicitly restricted share |
+| Publishing one file | `pagewell publish` puts it in their Documents — public and searchable by default, local images included — and does not create or join a visible Space. Read `searchable` back — the owner may have turned indexing off for their account or space. Use `--no-index` when they want it public but out of search engines; `--space` only when explicitly requested; `--visibility unlisted|code|password` only for an explicitly restricted share |
 | `engine_outdated` | `pagewell upgrade`, then retry. Do not fall back to another template — the template stays what it is |
 | `save` on a template other documents follow | Say so first; it reaches every document tracking `@^major` |
 | `--prune` would delete things | List the exact paths, get explicit agreement, only then `--yes` |
 | `conflict` | Show what changed and ask "overwrite" or "pull first". **Never decide to overwrite on your own** |
-| `unauthenticated` | Walk them into sign-in (§Signing in) — it doubles as sign-up. Do not fail silently, do not tell them to "register first" somewhere else |
+| Not signed in when they want a link (`unauthenticated`, or `doctor` says `authenticated: false`) | **Ask**: publish anonymously (no account, a link that disappears after 24 hours, one file up to 1 MiB, no local images) or sign in (free; a lasting page in their Documents; a new email creates the account). Wait for the answer, never pick for them, ask once per conversation. Anonymous → `publish --anonymous`; sign in → §Signing in, then `publish`. Do not tell them to "register first" somewhere else |
+| Where a piece goes | `pagewell publish` → their Documents. A Space only when the user names one (`--space <id>`, from `pagewell spaces`). Never `init` / `push` to publish a piece, never create a Space they did not ask for by name |
+| They want a change to a page you already published | `pagewell publish <file> --node <node_id>` (from that publish's JSON, or the page's link) — same link, new content. Without `--node` it becomes a second page |
 | A line on stderr says a newer pagewell is available | Finish the step you are on, then `pagewell upgrade` (and the `skill_update` command it prints, if any), then re-read SKILL.md if the text changed. Say so in one line; do not ask permission for a tool update, do ask before anything that touches their content |
 | `doctor.skill_update.available` is true | Run its `command` (normally `npx skills update pagewell -g -y`), then re-read SKILL.md before continuing. This updates instructions only; it does not touch the user's content. In DeepSeek Harness with the plugin it is `dsh plugin --profile … add github:pagewellai/pagewell`; if `dsh` is not on PATH or the command fails, tell the user in one line to update PageWell from the Plugins page and carry on |
 | `doctor --skill-version` is unknown | The CLI predates automatic skill checks. Run `pagewell upgrade`, then repeat step 0 |
 | Storage is full | `pagewell usage --files 10 --json`. Suggest trash → the files marked unused → upgrade, in that order. Uploaded files count against the quota exactly like documents |
 | `plan_required` | A Free-plan limit (Spaces are Pro-only · 20 live shares · 2 agent tokens · no password shares · no sending to X) or a template above the plan. Say which one — the message names it — and offer the cheap way out first (keep it in Documents, revoke an unused share or token, or use `--mode code` instead of password); hand over `pagewell.ai/pricing` second. **Never complete a payment** |
 | A public space, but a page has no `public_url` | It was set private on its own, or **taken down by PageWell** — the owner sees the reason in their workbench. Do not create shares to route around a take-down; they answer 404 too |
-| A document references an image | Put the file next to it and push with `--assets`. Never link to an image on someone else's host and call it done |
+| A document references an image | Put the file next to it; `publish` uploads it with the page. Read `missing_assets` out — those did not go up. Never link to an image on someone else's host and call it done |
 | Publishing a generated HTML page | Say its `render_mode`. `sandbox` means search engines see the summary, not the body |
 
 ## What to say at the end
@@ -390,7 +431,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
    3 images have alt text". The user does not know these checks exist; this
    sentence is how they learn what they are getting.
 3. **What you did not have** — every input you fell back on or invented.
-4. **Where it is** — link + code + expiry + permissions, or the file and its size.
+4. **Where it is** — link + code + expiry + permissions, and where it lives (their Documents, the Space they named, or anonymous until a stated time); or the file and its size.
 
 Then the remaining warnings, as the template's opinion rather than a verdict.
 

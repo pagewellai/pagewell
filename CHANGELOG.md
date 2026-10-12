@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.8.0 — 2026-10-12
+
+Publishing now goes to your Documents unless you name a Space. pagewell publish uploads the local images and files a document references along with it (only from the document's own folder: no hidden files, no symlinks, only uploadable types; anything skipped is listed in missing_assets), titles the page from the document, and always makes a new page, so two drafts that are both draft.md no longer replace each other; --node <node_id|link> updates an existing page in place and keeps its link. Not signed in, publish asks you to choose: the new --anonymous publishes one file (up to 1 MiB) as a link that disappears after 24 hours, or sign in for a lasting page. pagewell init no longer creates a Space named after the current folder: pass --space for an existing one or --title for a new one. SKILL: publishing means publish into Documents, a Space only when the user names it, and the agent asks anonymous-or-sign-in instead of choosing.
+
+Source commit `5cdba96`. Update with `pagewell upgrade`.
+
 ## v0.7.1 — 2026-10-12
 
 The repository is now github.com/pagewellai/pagewell (renamed from pagewell-skill). The old address keeps redirecting, so existing installs and older CLIs keep working unchanged. Install with `npx skills add pagewellai/pagewell -g`, or in DeepSeek Harness with `dsh plugin --profile web add github:pagewellai/pagewell`; the plugin package name stays pagewell-skill. pagewell doctor and pagewell upgrade now name the new address in their update commands. The Article template's desktop screenshot is refreshed: on article pages the outline on the right now mirrors the article's left margin, so both margins are equal at every window width.

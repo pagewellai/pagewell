@@ -13,23 +13,30 @@ Write a **relative path**, exactly as if the file sat next to your Markdown:
 [The full report (PDF)](files/q3-report.pdf)
 ```
 
-Then put the file there and push it with `--assets`:
+Then put the file there and publish the document — the files it references go
+up with it, into the same Documents page:
 
 ```
-docs/
-  guide/
-    intro.md          ← writes ![…](img/arch.png)
-    img/arch.png      ← the file
-    files/q3-report.pdf
+post/
+  intro.md            ← writes ![…](img/arch.png)
+  img/arch.png        ← the file
+  files/q3-report.pdf
 ```
 
 ```
-pagewell push --assets --json
+pagewell publish post/intro.md --json     # "assets": 2; anything it could not take is in missing_assets
 ```
 
 The path in the document is resolved **relative to the document**, so
 `img/arch.png` from `guide/intro.md` means `guide/img/arch.png`. That is the
-only rule; there is nothing else to learn.
+only rule; there is nothing else to learn. `publish` reads only files inside the
+document's folder — not hidden ones, not through symlinks, only the types below —
+and lists each reference it skipped with the reason in `missing_assets`. Read
+those out: on the page they are broken images.
+
+A folder kept in sync with a Space the user named does the same through
+`pagewell push --assets --json`. An anonymous `publish --anonymous` is one file
+and refuses a document with local files.
 
 Absolute URLs (`https://…`) are left alone. PageWell never fetches them for you
 — if you want the image to survive, upload it.
@@ -109,10 +116,11 @@ cat report.html | pagewell publish - --title "Q3 review" --json
 ```
 
 One call: unless `--space` is explicit, it uses the account's internal Documents
-container, which is not a user-visible Space; uploads the file; pulls the inline
-images out; makes the page public (searchable unless the owner turned indexing
-off, or `--no-index` was passed); prints its stable URL. Targeting a
-Space requires Pro.
+container, which is not a user-visible Space; uploads the file and the local
+files it references; pulls the inline images out; makes the page public
+(searchable unless the owner turned indexing off, or `--no-index` was passed);
+prints its stable URL. Targeting a Space requires Pro, and happens only when the
+user named the Space.
 
 ```json
 {"url": "https://p.pagewell.ai/s/AbCdEfGhIjKlMnOpQrStUvWxYzAbCdEf",

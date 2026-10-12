@@ -79,7 +79,7 @@ or update PageWell from the Plugins page.
 Every activation starts with a read-only check for both halves:
 
 ```bash
-pagewell doctor --json --skill-version v0.7.1
+pagewell doctor --json --skill-version v0.8.0
 ```
 
 If either half is behind, the JSON includes the exact next command. The manual
@@ -154,8 +154,11 @@ pagewell publish draft.md             # one link back
 ```
 
 Writing, checking, previewing and exporting need no account and no network.
-Signing in is only for publishing, and the agent never approves the device
-code or completes a payment for you — both happen in your own browser.
+Publishing puts the page, with its images, in your Documents — never in a Space
+unless you name one — and needs you signed in. Without an account,
+`pagewell publish --anonymous` makes a link that disappears after 24 hours; the
+agent asks you which you want. It never approves the device code or completes a
+payment for you — both happen in your own browser.
 
 ## Send an article to X
 

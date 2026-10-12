@@ -117,8 +117,13 @@ Settings → Agent tokens.
 pagewell init [--source .] [--space <id>] [--title <name>] [--json]
 ```
 
-Targets an existing Space, or creates one when `--space` is omitted. Spaces
-require Pro. Writes `.pagewell.yaml` and **never writes a credential into it**.
+Only for keeping a folder in sync with a Space **the user named**. `--space`
+targets an existing one (`pagewell spaces` lists them); `--title` creates a new
+one with the name they gave. With neither it refuses (`validation_failed`) and
+creates nothing — it used to name a new Space after the current directory, which
+is how an article once ended up in a Space called `article`. To publish a piece,
+use `publish`: it goes to Documents. Spaces require Pro. Writes `.pagewell.yaml`
+and **never writes a credential into it**.
 
 ## publish
 
@@ -126,17 +131,50 @@ require Pro. Writes `.pagewell.yaml` and **never writes a credential into it**.
 pagewell publish <file|-> [--space id] [--title t] [--path p]
                           [--visibility public|unlisted|code|password] [--password …]
                           [--expire 7d] [--allow copy,print]
-                          [--extract-assets=false] [--no-share] [--no-index] [--json]
+                          [--extract-assets=false] [--no-share] [--no-index]
+                          [--node <node_id|link>] [--json]
+pagewell publish <file|-> --anonymous [--path p] [--json]
 ```
 
-One file in, one link out. Unless `--space` is explicit, it writes to the
-account's internal **Documents** container, which is not shown as a Space;
-uploads; and makes the page public/searchable. Pass `--space` only when a Pro
-owner explicitly wants the page inside one. `.pagewell.yaml` does not redirect
-this one-file command into a Space. `-` reads standard input, which is
-what you want when the document is a string you just produced rather than a file
-on disk; with `-` the format defaults to HTML, so pass `--path draft.md` for
-Markdown.
+One file in, one link out — this is how a piece gets published. Unless `--space`
+is explicit, it writes to the account's internal **Documents** container (the
+Documents list in the workbench), which is not shown as a Space; uploads; and
+makes the page public/searchable. Pass `--space` only when the user named the
+Space. `.pagewell.yaml` does not redirect this one-file command into a Space.
+`-` reads standard input, which is what you want when the document is a string
+you just produced rather than a file on disk; with `-` the format defaults to
+HTML, so pass `--path draft.md` for Markdown.
+
+**Each publish is a new page** in Documents: its own internal place
+(`/_direct/…`, never shown), titled from the document (front matter `title`, its
+heading, or `<title>`) unless `--title` says otherwise. It never replaces another
+page, even when two drafts are both `draft.md` — it used to, by file name.
+`--node <node_id|link>` updates an existing page in place instead: the
+`node_id` from an earlier publish's JSON, or the page's own `/s/…` link; the link
+stays the same. In a Space, add `--space` (there, without `--node`, the file name
+or `--path` is the page's place, as it always was).
+
+**Local images and files go with it.** Every relative reference in the
+document — `![](img/arch.png)`, `[report](files/q3.pdf)`, `<img src>` — is read
+next to the document and uploaded under the key the server resolves from it
+(the same list the server builds when it ingests the page). Only files inside
+the document's folder, not hidden, of the types `push --assets` takes, and no
+symlinks: a document someone else wrote can reference `../../.ssh/id_rsa`, and
+the page is public. The JSON says `assets` (how many went up) and lists the rest
+in `missing_assets` (`[{ref, reason}]`) — read those out; on the page they are
+broken images.
+
+**Not signed in**, it answers `unauthenticated` with a hint to ask the user
+whether to publish anonymously or sign in. Ask; never choose for them.
+
+**`--anonymous`** publishes without an account: one file up to 1 MiB, five per IP
+per UTC day, and the link disappears after 24 hours (`expires_at`). It never
+sends a token, even when signed in. It refuses a document that references local
+files (it names them — sign in to send them, or take them out; `data:` images
+inside the file are fine) and any flag that needs an account (`--space`,
+`--title`, `--visibility`, `--password`, `--expire`, `--allow`, `--no-share`,
+`--no-index`). The JSON has `anonymous: true`, `url`, `expires_at` and `limits`.
+An anonymous page cannot be updated in place: publishing again makes a new link.
 
 `--extract-assets` (on by default, HTML only) pulls inline `data:` images over
 1 KiB out into content-addressed files. A generated page usually carries four or
