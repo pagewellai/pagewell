@@ -1,7 +1,7 @@
 {
-  "version": "v0.6.1",
-  "commit": "037b5159fba2f1dcf6b9fe9e8bac42f4bfc56916",
-  "built_at": "2026-10-11T13:43:37Z",
+  "version": "v0.7.0",
+  "commit": "826e131c0fe82362a7f35f7d751084285b2f7ac5",
+  "built_at": "2026-10-12T03:23:49Z",
   "platforms": ["darwin/arm64","darwin/amd64","linux/amd64","linux/arm64","windows/amd64","windows/arm64"],
   "install": "https://github.com/pagewellai/pagewell-skill",
   "binaries": "https://raw.githubusercontent.com/pagewellai/pagewell-skill/binaries/bin/",

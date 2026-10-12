@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.7.0 — 2026-10-12
+
+PageWell is now also a DeepSeek Harness plugin: package.json declares a dsh.bundle and dsh/index.js registers this same SKILL.md with dsh's skill registry, so `dsh plugin --profile web add github:pagewellai/pagewell-skill` (or the Plugins page) installs it. pagewell auth login --device-code <device_code> waits for the code an earlier --wait=false printed; before, a second auth login started a new code and the one the user approved was never collected. A sign-in that cannot store its token (an agent sandbox limited to the project) now stops with credentials_unwritable before starting or polling a code, instead of failing after approval and leaving an unused token behind. Hosted libraries are embedded even when the local cache cannot be written, and export only says the file opens with no network when nothing is missing. doctor and upgrade name the dsh plugin update when the skill came from it. SKILL: the description fits dsh's 500-character catalog, sign-in waits with --device-code, and sandboxed harnesses are told which commands need wider permission.
+
+Source commit `826e131`. Update with `pagewell upgrade`.
+
 ## v0.6.1 — 2026-10-11
 
 Rebuilt from current PageWell source. No user-facing SKILL or CLI behavior changes from v0.6.0.

@@ -45,12 +45,41 @@ this machine needs from the `binaries` branch and verifies it against
 ~/.claude/skills/pagewell/scripts/install.sh    # or wherever the skill landed
 ```
 
+## DeepSeek Harness
+
+This repository is also a [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
+(`dsh`) plugin: `package.json` declares a `dsh.bundle`, and `dsh/index.js`
+registers this same `SKILL.md` with dsh's skill registry. There is no second
+copy of the instructions, no build step and nothing to configure.
+
+```bash
+dsh plugin --profile web add github:pagewellai/pagewell-skill        # the web UI
+dsh plugin --profile desktop add github:pagewellai/pagewell-skill    # the desktop app, with the dsh command it installs
+```
+
+Or install `github:pagewellai/pagewell-skill` from the Plugins page. The `pagewell` skill then
+appears in the agent's skill catalog: ask for an article, a page or a link, or
+type `/pagewell`.
+
+Installed the skill with `npx skills add pagewellai/pagewell-skill -g` already? dsh reads
+`~/.agents/skills` as well, so it has the skill without the plugin; with both,
+dsh uses the `~/.agents/skills` copy.
+
+Under dsh's default `workspace-write` sandbox, writing, checking, previewing,
+exporting and publishing run as they are. Signing in, `pagewell upgrade`,
+installing the CLI and adding a template write to your home directory
+(`~/.config/pagewell`, `~/.local/bin`, `~/.cache/pagewell`), so the agent
+asks to run that one command outside the sandbox: approve it in dsh, then
+approve the device code in your browser. To update, run the command
+`pagewell doctor` names (`dsh plugin --profile <profile> add github:pagewellai/pagewell-skill`),
+or update PageWell from the Plugins page.
+
 ## Updating
 
 Every activation starts with a read-only check for both halves:
 
 ```bash
-pagewell doctor --json --skill-version v0.6.1
+pagewell doctor --json --skill-version v0.7.0
 ```
 
 If either half is behind, the JSON includes the exact next command. The manual

@@ -25,7 +25,12 @@ version still supported — commands keep working, but upgrade before going on.
 compares the activated SKILL.md with the newer of the running CLI and the
 published release. When `available` is true, run `command` and re-read SKILL.md.
 For the global install shown in the README the command is
-`npx skills update pagewell -g -y`.
+`npx skills update pagewell -g -y`. Inside DeepSeek Harness, with the skill
+installed as a plugin (the profile in `DSH_PROFILE` lists `pagewell-skill`), it
+is `dsh plugin --profile <profile> add github:pagewellai/pagewell-skill`. That
+needs `dsh` and `pnpm` on PATH (for the `desktop` profile, the `dsh` command
+the desktop app installs); when they are not there or the command fails, the
+user updates PageWell from the Plugins page instead.
 
 ## upgrade
 
@@ -42,7 +47,8 @@ downloads the binary for this machine (from the repository's `binaries` branch),
 verifies it against `SHA256SUMS`, and replaces itself; the result then says
 `method: "binary"` and, when the skill text still needs refreshing, `skill_update`
 holds the command that does it — `npx skills update pagewell -g -y` for a skill
-installed with `npx skills add`. Run it, then re-read SKILL.md.
+installed with `npx skills add`, the `dsh plugin … add` command for the
+DeepSeek Harness plugin. Run it, then re-read SKILL.md.
 
 If an older CLI rejects `--skill-version`, upgrade the CLI and repeat `doctor`.
 That is the only bootstrap exception; released current versions always report
@@ -60,7 +66,7 @@ supported floor) a line goes to **stderr** — stdout stays JSON under `--json`.
 ## auth
 
 ```
-pagewell auth login  [--scopes …] [--name …] [--wait=false] [--json]
+pagewell auth login  [--scopes …] [--name …] [--wait=false] [--device-code …] [--json]
 pagewell auth status [--json]
 pagewell auth logout [--json]
 ```
@@ -69,10 +75,28 @@ pagewell auth logout [--json]
 **There is no `billing:write`** — it does not exist, and agents must not complete
 payments. `config:manage` has to be asked for explicitly.
 
-`--wait=false` prints the verification URL and user code and exits, so you can
-hand them over first and poll later. Read both out, then wait:
+`--wait=false` prints `verification_url`, `user_code` and `device_code`, stores
+nothing and exits, so you can hand the URL and code over first. Read both out,
+then wait for **that** code:
 
 > Open **pagewell.ai/device** and enter **WDJH-4KQP**. I'll wait here.
+
+```
+pagewell auth login --json --device-code <device_code>
+```
+
+`--device-code` polls the code the first call printed until it is approved,
+denied or expired (15 minutes), then stores the token. Without it, `auth login`
+starts a **new** code, which is the right thing only when you show its output as
+it arrives. `--device-code` with `--wait=false` is refused.
+
+A call that will store a token first checks that it can write
+`~/.config/pagewell/credentials.yaml`, and refuses with `credentials_unwritable`
+before starting or polling anything. That is what an agent sandbox limited to
+the project directory produces (DeepSeek Harness `workspace-write`, Codex):
+rerun the same command with the harness's permission to write outside the
+project. Nothing was spent, so the user approves only once. Do not redirect
+`PAGEWELL_CONFIG_HOME` into the project.
 
 ⛔ **In either mode, never approve on the user's behalf.** Do not open a browser
 and click confirm, do not ask for or fill in any credential. Approval happens in

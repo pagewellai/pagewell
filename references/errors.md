@@ -30,11 +30,12 @@ The `--json` shape:
 | `x_rejected` | X refused the request; `detail` has X's own words | HTTP 403 almost always means the X account has no Premium (Articles need it). Say so and stop — do not retry in a loop |
 | `internal` | Server-side failure | Report it with the `request_id` |
 
-The CLI adds three of its own:
+The CLI adds its own:
 
 | code | Meaning |
 |---|---|
 | `credentials_in_project` | A credential was found in the project directory. **Clean it up before anything else** |
+| `credentials_unwritable` | `auth login` cannot write `~/.config/pagewell/credentials.yaml`, so it stopped before starting or polling a code — nothing was spent. Usually an agent sandbox that only allows the project directory: **rerun the same command with permission to write there.** Never move the credentials into the project |
 | `needs_confirmation` | This push would delete things, exceed quota, or is unusually large |
 | `network` | Cannot reach the server |
 | `engine_outdated` | This template needs a newer renderer than the CLI has. **Run `scripts/install.sh` and try again.** Do not fall back to another template — the user picked that one, and quietly using a different one is how they never find out |

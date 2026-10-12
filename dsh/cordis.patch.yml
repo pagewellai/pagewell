@@ -1,0 +1,13 @@
+# The layer this package contributes to a DeepSeek Harness (dsh) profile that
+# lists it: one row, the skill provider in dsh/index.js, which serves this
+# repository's SKILL.md on `ctx.skills`. The row names the package rather than a
+# path, so Node resolution finds the installed copy wherever pnpm put it — see
+# https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md
+#
+# Nothing to configure: no tools, no MCP server, no keys. The skill drives the
+# `pagewell` CLI through dsh's own bash tool, installs it on first use, and walks
+# the user through `pagewell auth login` the first time a link is wanted.
+
+- insert:
+    - id: pagewell-skill
+      name: pagewell-skill

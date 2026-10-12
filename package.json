@@ -1,0 +1,47 @@
+{
+  "name": "pagewell-skill",
+  "version": "0.7.0",
+  "description": "The PageWell skill, also a DeepSeek Harness plugin: write a designed article or a one-page artifact, check it against its template, and publish it as a link, a share code or a single HTML file.",
+  "type": "module",
+  "main": "./dsh/index.js",
+  "exports": {
+    ".": "./dsh/index.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./dsh/locale/*.json"
+  },
+  "icon": "./dsh/icon.svg",
+  "files": [
+    "SKILL.md",
+    "references",
+    "assets",
+    "scripts",
+    "dsh",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "MANIFEST",
+    "version.json"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./dsh/cordis.patch.yml"
+    }
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "agent-skills",
+    "skill",
+    "markdown",
+    "html",
+    "article",
+    "publish",
+    "share"
+  ],
+  "homepage": "https://pagewell.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pagewellai/pagewell-skill.git"
+  },
+  "license": "Apache-2.0"
+}
