@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.9.0 — 2026-10-14
+
+Vertical pages: new story and game templates that PageWell plays full screen on a phone (a centred phone on a computer, the same inside X's in-app browser). The skill picks story or game from the request; pagewell preview opens them in the same player; pagewell export writes one standalone HTML file. New phone rules in references/stage.md, enforced by pagewell check: no viewport units or CSS math to scale, no window sizes, canvas by pagewell.pixelRatio, sound unlocked on pointerup, no alert/confirm/prompt, an opaque body background, taps on pointerdown with a click fallback. publish --anonymous now refuses a story, a game or any running page up front (anonymous pages run no scripts) instead of using up a daily slot.
+
+Source commit `5196d60`. Update with `pagewell upgrade`.
+
 ## v0.8.0 — 2026-10-12
 
 Publishing now goes to your Documents unless you name a Space. pagewell publish uploads the local images and files a document references along with it (only from the document's own folder: no hidden files, no symlinks, only uploadable types; anything skipped is listed in missing_assets), titles the page from the document, and always makes a new page, so two drafts that are both draft.md no longer replace each other; --node <node_id|link> updates an existing page in place and keeps its link. Not signed in, publish asks you to choose: the new --anonymous publishes one file (up to 1 MiB) as a link that disappears after 24 hours, or sign in for a lasting page. pagewell init no longer creates a Space named after the current folder: pass --space for an existing one or --title for a new one. SKILL: publishing means publish into Documents, a Space only when the user names it, and the agent asks anonymous-or-sign-in instead of choosing.

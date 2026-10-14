@@ -2,14 +2,14 @@
 name: pagewell
 description: >
   Write and publish a document that looks designed — an article, a report, a
-  one-pager, a handbook — or a one-page artifact that runs in the browser: a
-  principle explainer, a playground. Hand back a link, a share code or one
-  HTML file. Use for "write me an article", "make this a nice document",
-  "explain how X works with a demo", "share or publish this", in any language
-  ("写篇文章", "原理演示", "讲解页"); also for house templates, charts,
-  managing published pages, and X Article drafts ("发到 X 长文").
+  handbook — or a one-page artifact that runs in the browser: a principle
+  explainer, a vertical story that plays like a short video, a small game,
+  and hand back a link. Use for "write me an article", "explain
+  how X works with a demo", "make it vertical / like a reel", "make a game",
+  "publish this", in any language ("写篇文章", "原理演示", "竖屏", "小游戏");
+  also for templates, charts, published pages, X Article drafts ("发到 X 长文").
 metadata:
-  version: "v0.8.0"
+  version: "v0.9.0"
 ---
 
 # PageWell
@@ -25,7 +25,17 @@ to take the one the request calls for, read what it hands you, and follow it.
 |---|---|
 | any document — an article, a post, a report, a guide, a one-pager | `article` (the only document template for now) |
 | a page where the reader must see a mechanism work | `principle` (a running page, below) |
+| something **vertical that plays**: "like a short video / reel / TikTok / Stories", "one screen at a time", "vertical slides", "竖屏", "像短视频", "竖屏 PPT", a thread-style explainer for X | `story` (a running page that plays slide by slide) |
+| something **to play**: "a game", "a mini game", "an H5 game", "小游戏" | `game` (a running page, played with one thumb) |
 | a template by name (their own house template, say) | that one |
+
+`story` and `game` are **vertical**: a fixed 360 × 640 stage that PageWell plays
+like a video — full screen on a phone, a centred phone on a computer, the same
+inside X's in-app browser, PageWell's bar underneath. The rules are in
+`references/stage.md`; read it before writing either — including its **phone
+rules** (no `vh`/`vw`, no CSS math to scale, no `innerWidth`, sound unlocked
+on `pointerup`, no `alert`, an opaque `body` background, taps on `pointerdown`
+with a `click` fallback; a game keeps its bottom-right corner free).
 
 A résumé gets its own template later. Until then write it with `article` and
 say in one line that it is laid out as an article.
@@ -42,7 +52,8 @@ a `variant:`. Change it only if they explicitly ask for a different template.
 | No, the page *is* the thing | `artifact` — one self-contained HTML file. Always sandboxed. |
 
 Do not ask "is this a tool or an explainer". That is a template, not a kind.
-Principle demos, playgrounds, converters, comparison boards are all artifacts.
+Principle demos, playgrounds, converters, comparison boards, vertical stories
+and games are all artifacts.
 A series of pages is several artifacts, or a `doc` tree — never one artifact
 with a second HTML file.
 
@@ -55,7 +66,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.8.0
+0  pagewell doctor --json --skill-version v0.9.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -75,18 +86,20 @@ text and the CLI; do not wait for the user to ask whether an update exists.
 6  pagewell preview                    exactly what publishing will produce
 
 ── artifact ──
-1  pagewell templates use principle -o page.html
+1  pagewell templates use principle -o page.html      (story / game → references/stage.md first)
 2  COLLECT EVERY REQUIRED INPUT before writing a word
 3  Write ONE html file. Replace every ⟦…⟧.
      No second page. No fetch. No form. State stays in memory.
+     story / game: design for the 360 × 640 stage; the platform plays it
 4  pagewell check page.html --json     same three-round rule
 5  Read the rubric. First frame must work with JS off (noscript).
-6  pagewell preview                    the page itself, not an article shell
+6  pagewell preview                    the page itself; story / game open in the player
 
 ── then ──
 7  Publish: pagewell publish draft.md --json       → their Documents, images included
      changing a page you already published → add --node <node_id> (same link)
      not signed in → ASK: anonymous or sign in (§Signing in). Never pick for them
+       story / game / any page with scripts: sign in only — anonymous runs no scripts
      a Space only when the user named one. Never init / push to publish a piece
    Or export one HTML file. Already have one? `pagewell publish <file>`
    Want it on X as well? `pagewell x draft draft.md` (§Sending to X)
@@ -209,6 +222,11 @@ they want, then wait for the answer.** Never pick for them:
 >   own, and you can update or share it later. A new email creates the account.
 >
 > Which would you like?
+
+A story, a game or any page that runs scripts **cannot be anonymous** —
+anonymous pages run no scripts, and `publish --anonymous` refuses them before
+uploading. Do not offer the choice then: say signing in (free) is how this one
+gets a link, and start it when they agree.
 
 Anonymous:
 
@@ -395,6 +413,8 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | They want a résumé | `article` for now; say in one line that it is laid out as an article |
 | Using a `doc` template | Write **Markdown or the template's front-matter fields** |
 | Using an `artifact` template | Write **one HTML file**. No second page, no `fetch`, no `<form>` |
+| They want it vertical, "like a video", one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage; ≤ 140 characters each; never build your own player, progress bar or autoplay (`references/stage.md`) |
+| They want something to play | `game`. Starts on a start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause` (`references/stage.md`) |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
 | A required input is missing | **Ask.** Never invent it |
 | `check` reports errors | Do not push, do not export |
@@ -411,7 +431,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | `save` on a template other documents follow | Say so first; it reaches every document tracking `@^major` |
 | `--prune` would delete things | List the exact paths, get explicit agreement, only then `--yes` |
 | `conflict` | Show what changed and ask "overwrite" or "pull first". **Never decide to overwrite on your own** |
-| Not signed in when they want a link (`unauthenticated`, or `doctor` says `authenticated: false`) | **Ask**: publish anonymously (no account, a link that disappears after 24 hours, one file up to 1 MiB, no local images) or sign in (free; a lasting page in their Documents; a new email creates the account). Wait for the answer, never pick for them, ask once per conversation. Anonymous → `publish --anonymous`; sign in → §Signing in, then `publish`. Do not tell them to "register first" somewhere else |
+| Not signed in when they want a link (`unauthenticated`, or `doctor` says `authenticated: false`) | A story / game / page with scripts: sign in is the only way — say so. Otherwise **ask**: publish anonymously (no account, a link that disappears after 24 hours, one file up to 1 MiB, no local images) or sign in (free; a lasting page in their Documents; a new email creates the account). Wait for the answer, never pick for them, ask once per conversation. Anonymous → `publish --anonymous`; sign in → §Signing in, then `publish`. Do not tell them to "register first" somewhere else |
 | Where a piece goes | `pagewell publish` → their Documents. A Space only when the user names one (`--space <id>`, from `pagewell spaces`). Never `init` / `push` to publish a piece, never create a Space they did not ask for by name |
 | They want a change to a page you already published | `pagewell publish <file> --node <node_id>` (from that publish's JSON, or the page's link) — same link, new content. Without `--node` it becomes a second page |
 | A line on stderr says a newer pagewell is available | Finish the step you are on, then `pagewell upgrade` (and the `skill_update` command it prints, if any), then re-read SKILL.md if the text changed. Say so in one line; do not ask permission for a tool update, do ask before anything that touches their content |
@@ -426,7 +446,10 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 ## What to say at the end
 
 1. **What you made** — an article, or a running page. For a running page, also
-   say it is one page, sandboxed, and cannot reach the network.
+   say it is one page, sandboxed, and cannot reach the network. For a `story`
+   or `game`, say how it opens: as a vertical player — full screen on a phone,
+   a centred phone on a computer, the same inside X — and that the link posted
+   on X shows a "Story" / "Game" card.
 2. **What you checked** — "5 sections, 1,420 words, summary 98 characters, all
    3 images have alt text". The user does not know these checks exist; this
    sentence is how they learn what they are getting.
@@ -445,6 +468,7 @@ This file is the whole normal flow. Load one of these only when you hit it:
 | `templates.md` | which template a request gets, writing a house template |
 | `components.md` | building a component, or one is not doing what you meant |
 | `artifact.md` | writing a running page: single-file contract, checks, vs embed |
+| `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, slides, timing, input, X |
 | `libraries.md` | diagrams, formulas, interactive charts, animation, `embed` |
 | `charts.md` | a ` ```chart ` is not doing what you meant |
 | `cli.md` | exact flags, share modes, the JSON shapes, `x draft` |

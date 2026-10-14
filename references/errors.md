@@ -12,11 +12,11 @@ The `--json` shape:
 
 | code | Meaning | What to do |
 |---|---|---|
-| `unauthenticated` | Not signed in, or the token is gone | When it came from `publish`: **ask whether to publish anonymously or sign in**, wait for the answer, never pick for them (SKILL §Signing in). Elsewhere, walk through sign-in again. Do not fail silently |
+| `unauthenticated` | Not signed in, or the token is gone | When it came from `publish`: for a story / game / page with scripts, sign-in is the only way — say so; otherwise **ask whether to publish anonymously or sign in**, wait for the answer, never pick for them (SKILL §Signing in). Elsewhere, walk through sign-in again. Do not fail silently |
 | `forbidden_scope` | The token lacks this permission | Name the missing scope and ask the user to re-authorise |
 | `not_found` | No such object | Confirm with `pagewell tree` or `spaces` first |
 | `conflict` | The remote changed, or the plan was already committed | **Do not decide to overwrite.** Show the remote state and ask |
-| `validation_failed` | Malformed request | `detail` usually names the offending entry |
+| `validation_failed` | Malformed request | `detail` usually names the offending entry. From `publish --anonymous`: the page runs scripts or carries its own styles — anonymous takes neither; sign in to publish it |
 | `depth_exceeded` | More than 8 levels deep | Flatten the tree |
 | `too_many_nodes` | Space is over its page limit | Split into several spaces |
 | `doc_too_large` | A single document exceeds 5 MiB | Try `--assets` to pull images out; if it still exceeds, split it |

@@ -171,7 +171,10 @@ whether to publish anonymously or sign in. Ask; never choose for them.
 per UTC day, and the link disappears after 24 hours (`expires_at`). It never
 sends a token, even when signed in. It refuses a document that references local
 files (it names them — sign in to send them, or take them out; `data:` images
-inside the file are fine) and any flag that needs an account (`--space`,
+inside the file are fine), a story, a game or any page marked
+`pagewell:kind=artifact` (anonymous pages run no scripts — sign in for those;
+other HTML with scripts or its own styles comes back `validation_failed` from
+the server), and any flag that needs an account (`--space`,
 `--title`, `--visibility`, `--password`, `--expire`, `--allow`, `--no-share`,
 `--no-index`). The JSON has `anonymous: true`, `url`, `expires_at` and `limits`.
 An anonymous page cannot be updated in place: publishing again makes a new link.

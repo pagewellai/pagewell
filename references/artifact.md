@@ -50,6 +50,12 @@ pagewell templates use principle -o page.html
 Default to `principle` when they want a mechanism visible. The skeleton is
 HTML with `⟦…⟧` and `<meta name="pagewell:kind" content="artifact">`.
 
+Vertical pages are artifacts too: `story` (slides that play like a short video)
+and `game` (played with one thumb). They declare
+`<meta name="pagewell:display" content="story|game">`, are designed for a fixed
+360 × 640 stage, and open in PageWell's player instead of the reading page.
+Everything on this page still applies; the extra rules are in `stage.md`.
+
 Metadata is meta tags, not YAML front matter. `pagewell:template` names the
 template; `pagewell:subject` (and other `front:` keys from `inputs`) are how
 `check` sees required inputs.

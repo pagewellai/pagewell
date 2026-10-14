@@ -73,7 +73,10 @@ author believing they had used it.
 
 `pagewell:kind=artifact` marks a running page: always sandboxed, one HTML file,
 checked with the artifact rules. `pagewell:template` names an artifact template
-(`principle`). Required inputs from
+(`principle`, `story`, `game`). `pagewell:display` (`story` or `game`) makes the
+page open in the vertical player — a 360 × 640 stage, see `stage.md`;
+`pagewell:autoplay` set to `off` makes a story wait for a tap on every slide.
+Required inputs from
 the template's `inputs.yaml` land as `pagewell:<front>` (here `subject`).
 
 A `doc` is Markdown with YAML front matter. Do not put `<meta>` in Markdown.

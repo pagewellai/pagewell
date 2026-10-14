@@ -12,6 +12,8 @@ and why anyone can write one without shipping executable logic to a reading page
 |---|---|
 | any document — article, post, report, guide, one-pager, handbook page | `article` |
 | a page where the reader must see a mechanism work (artifact mode) | `principle` |
+| something vertical that plays slide by slide — "like a short video", "竖屏" (artifact mode) | `story` — see `stage.md` |
+| something to play — "a game", "小游戏" (artifact mode) | `game` — see `stage.md` |
 | a template by name — their own house template, say | that one |
 | a résumé | `article` for now, and say so in one line. A résumé template with its own components comes later |
 
@@ -62,6 +64,8 @@ the shape a finished draft has, and a better guide than any description.
 |---|---|
 | `article` | every document: lead, sections, key points, author card. Its components are whatever `templates use article` lists |
 | `principle` | a running page that makes a mechanism visible (artifact mode, always sandboxed) |
+| `story` | a vertical 360 × 640 story played slide by slide like a short video (artifact mode, `stage.md`) |
+| `game` | a vertical 360 × 640 game played with one thumb (artifact mode, `stage.md`) |
 | `resume` | installed, but not offered yet — do not pick it |
 | *(none)* | a documentation tree pushed as-is: the platform look, tree of pages on the left, outline on the right. You do not choose this; it is what files without `template:` get |
 
