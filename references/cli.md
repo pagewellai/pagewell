@@ -73,7 +73,10 @@ pagewell auth logout [--json]
 
 `--scopes` defaults to `space:read,space:write,share:manage,billing:read`.
 **There is no `billing:write`** — it does not exist, and agents must not complete
-payments. `config:manage` has to be asked for explicitly.
+payments. `config:manage` has to be asked for explicitly. `backup:manage` (app
+backups, such as X Copilot's) is for native apps, not agents: the user creates
+that token on the console's Agent tokens page and pastes it into the app — do not
+request it from `auth login`.
 
 `--wait=false` prints `verification_url`, `user_code` and `device_code`, stores
 nothing and exits, so you can hand the URL and code over first. Read both out,
@@ -86,7 +89,10 @@ pagewell auth login --json --device-code <device_code>
 ```
 
 `--device-code` polls the code the first call printed until it is approved,
-denied or expired (15 minutes), then stores the token. Without it, `auth login`
+denied or expired (15 minutes), then stores the token. The token itself lasts
+**60 days**; `pagewell auth status` shows when it expires (`expires_at` in
+`--json`), and every command prints a one-line reminder on stderr in its last
+7 days. Sign in again before then to keep working. Without it, `auth login`
 starts a **new** code, which is the right thing only when you show its output as
 it arrives. `--device-code` with `--wait=false` is refused.
 

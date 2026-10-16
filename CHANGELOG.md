@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.10.0 — 2026-10-16
+
+Sign-ins now expire: agent tokens last 60 days. pagewell auth status shows when yours expires, and every command warns on stderr in the last 7 days — run pagewell auth login again before then. Story and game pages: a single floating button replaces the bottom bar; the stage fills the width on phones and may cut up to 48 px off the top and bottom, so keep text, buttons and scores between y 48 and 592. New pagewell.point(event) turns an event into stage coordinates. pagewell check adds phone rules: drags must use touch events with preventDefault in touchmove, no clientX as stage coordinates, a click fallback for taps, an opaque body background, and no vh / CSS math / innerWidth scaling.
+
+Source commit `dc31123`. Update with `pagewell upgrade`.
+
 ## v0.9.0 — 2026-10-14
 
 Vertical pages: new story and game templates that PageWell plays full screen on a phone (a centred phone on a computer, the same inside X's in-app browser). The skill picks story or game from the request; pagewell preview opens them in the same player; pagewell export writes one standalone HTML file. New phone rules in references/stage.md, enforced by pagewell check: no viewport units or CSS math to scale, no window sizes, canvas by pagewell.pixelRatio, sound unlocked on pointerup, no alert/confirm/prompt, an opaque body background, taps on pointerdown with a click fallback. publish --anonymous now refuses a story, a game or any running page up front (anonymous pages run no scripts) instead of using up a daily slot.

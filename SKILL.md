@@ -9,7 +9,7 @@ description: >
   "publish this", in any language ("写篇文章", "原理演示", "竖屏", "小游戏");
   also for templates, charts, published pages, X Article drafts ("发到 X 长文").
 metadata:
-  version: "v0.9.0"
+  version: "v0.10.0"
 ---
 
 # PageWell
@@ -35,7 +35,10 @@ inside X's in-app browser, PageWell's bar underneath. The rules are in
 `references/stage.md`; read it before writing either — including its **phone
 rules** (no `vh`/`vw`, no CSS math to scale, no `innerWidth`, sound unlocked
 on `pointerup`, no `alert`, an opaque `body` background, taps on `pointerdown`
-with a `click` fallback; a game keeps its bottom-right corner free).
+with a `click` fallback, drags on touch events with `preventDefault()` in
+`touchmove`, everything that matters between y = 48 and y = 592 because phones
+cut up to 48 px off the top and bottom; a game keeps its bottom-right corner
+free).
 
 A résumé gets its own template later. Until then write it with `article` and
 say in one line that it is laid out as an article.
@@ -66,7 +69,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.9.0
+0  pagewell doctor --json --skill-version v0.10.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -277,7 +280,10 @@ or ask for a password or a verification code — approval only accepts a session
 in the user's own browser, and the token you get is scoped to what they allowed.
 The token is stored at `~/.config/pagewell/credentials.yaml` (mode 0600), never
 in the project directory; `pagewell auth logout` removes it, and the user can
-revoke it any time under **Settings → Agent tokens**.
+revoke it any time under **Settings → Agent tokens**. It **expires after 60
+days**: from 7 days before, the CLI says so on stderr — tell the user and, when
+they want, walk through `pagewell auth login` again. An expired token answers
+`unauthenticated`, exactly like no sign-in.
 
 ## Publishing, or one file
 
@@ -449,7 +455,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
    say it is one page, sandboxed, and cannot reach the network. For a `story`
    or `game`, say how it opens: as a vertical player — full screen on a phone,
    a centred phone on a computer, the same inside X — and that the link posted
-   on X shows a "Story" / "Game" card.
+   on X shows a card with its first screen in a phone ("Story" / "Game").
 2. **What you checked** — "5 sections, 1,420 words, summary 98 characters, all
    3 images have alt text". The user does not know these checks exist; this
    sentence is how they learn what they are getting.
