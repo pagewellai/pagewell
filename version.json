@@ -1,0 +1,9 @@
+{
+  "version": "v0.11.0",
+  "commit": "08fd7553a04ee2c21f4f6bcaa3f8b53e104b0cb1",
+  "built_at": "2026-10-17T17:24:26Z",
+  "platforms": ["darwin/arm64","darwin/amd64","linux/amd64","linux/arm64","windows/amd64","windows/arm64"],
+  "install": "https://github.com/pagewellai/pagewell",
+  "binaries": "https://raw.githubusercontent.com/pagewellai/pagewell/binaries/bin/",
+  "changelog": "https://github.com/pagewellai/pagewell/blob/main/CHANGELOG.md"
+}
