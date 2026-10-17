@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.11.0 — 2026-10-17
+
+Story and game pages now wear PageWell's stage style (stage-1). The scaffolds declare <meta name="pagewell:style" content="stage-1"> and build every screen from its layouts (data-layout), tones (data-tone: ink, pine, paper, mint) and components; PageWell adds the styles when the page is served, in preview and in export. pagewell check warns about colours, fonts and font sizes written by hand and about unknown layouts or tones. Canvas games get pagewell.colors, pagewell.font and pagewell.fit(). Templates story and game 1.1.0; references/stage.md has a new section, The style.
+
+Source commit `08fd755`. Update with `pagewell upgrade`.
+
 ## v0.10.0 — 2026-10-16
 
 Sign-ins now expire: agent tokens last 60 days. pagewell auth status shows when yours expires, and every command warns on stderr in the last 7 days — run pagewell auth login again before then. Story and game pages: a single floating button replaces the bottom bar; the stage fills the width on phones and may cut up to 48 px off the top and bottom, so keep text, buttons and scores between y 48 and 592. New pagewell.point(event) turns an event into stage coordinates. pagewell check adds phone rules: drags must use touch events with preventDefault in touchmove, no clientX as stage coordinates, a click fallback for taps, an opaque body background, and no vh / CSS math / innerWidth scaling.

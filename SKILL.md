@@ -9,7 +9,7 @@ description: >
   "publish this", in any language ("写篇文章", "原理演示", "竖屏", "小游戏");
   also for templates, charts, published pages, X Article drafts ("发到 X 长文").
 metadata:
-  version: "v0.10.0"
+  version: "v0.11.0"
 ---
 
 # PageWell
@@ -31,10 +31,13 @@ to take the one the request calls for, read what it hands you, and follow it.
 
 `story` and `game` are **vertical**: a fixed 360 × 640 stage that PageWell plays
 like a video — full screen on a phone, a centred phone on a computer, the same
-inside X's in-app browser, PageWell's bar underneath. The rules are in
-`references/stage.md`; read it before writing either — including its **phone
-rules** (no `vh`/`vw`, no CSS math to scale, no `innerWidth`, sound unlocked
-on `pointerup`, no `alert`, an opaque `body` background, taps on `pointerdown`
+inside X's in-app browser, PageWell's bar underneath. Both wear **PageWell's
+stage style** (`<meta name="pagewell:style" content="stage-1">`, in the
+scaffold): you pick a layout and a tone per slide and build from its
+components — **no colours, fonts or font sizes of your own**; `check` warns
+about each one. The rules are in `references/stage.md`; read it before writing
+either — including its **phone rules** (no `vh`/`vw`, no CSS math to scale, no
+`innerWidth`, sound unlocked on `pointerup`, no `alert`, taps on `pointerdown`
 with a `click` fallback, drags on touch events with `preventDefault()` in
 `touchmove`, everything that matters between y = 48 and y = 592 because phones
 cut up to 48 px off the top and bottom; a game keeps its bottom-right corner
@@ -69,7 +72,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.10.0
+0  pagewell doctor --json --skill-version v0.11.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -93,7 +96,7 @@ text and the CLI; do not wait for the user to ask whether an update exists.
 2  COLLECT EVERY REQUIRED INPUT before writing a word
 3  Write ONE html file. Replace every ⟦…⟧.
      No second page. No fetch. No form. State stays in memory.
-     story / game: design for the 360 × 640 stage; the platform plays it
+     story / game: the stage style's layouts and components, no colours / fonts / sizes
 4  pagewell check page.html --json     same three-round rule
 5  Read the rubric. First frame must work with JS off (noscript).
 6  pagewell preview                    the page itself; story / game open in the player
@@ -419,8 +422,8 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | They want a résumé | `article` for now; say in one line that it is laid out as an article |
 | Using a `doc` template | Write **Markdown or the template's front-matter fields** |
 | Using an `artifact` template | Write **one HTML file**. No second page, no `fetch`, no `<form>` |
-| They want it vertical, "like a video", one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage; ≤ 140 characters each; never build your own player, progress bar or autoplay (`references/stage.md`) |
-| They want something to play | `game`. Starts on a start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause` (`references/stage.md`) |
+| They want it vertical, "like a video", one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage, each with a `data-layout` and `data-tone` from the stage style; ≤ 140 characters each; no colours, fonts or sizes of your own; never build your own player, progress bar or autoplay (`references/stage.md`) |
+| They want something to play | `game`. Starts on an HTML start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause`; the score and messages are the style's HTML, the canvas draws with `pagewell.colors` (`references/stage.md`) |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
 | A required input is missing | **Ask.** Never invent it |
 | `check` reports errors | Do not push, do not export |
@@ -474,7 +477,7 @@ This file is the whole normal flow. Load one of these only when you hit it:
 | `templates.md` | which template a request gets, writing a house template |
 | `components.md` | building a component, or one is not doing what you meant |
 | `artifact.md` | writing a running page: single-file contract, checks, vs embed |
-| `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, slides, timing, input, X |
+| `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, the stage style (layouts, tones, components), slides, timing, input, X |
 | `libraries.md` | diagrams, formulas, interactive charts, animation, `embed` |
 | `charts.md` | a ` ```chart ` is not doing what you meant |
 | `cli.md` | exact flags, share modes, the JSON shapes, `x draft` |
