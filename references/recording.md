@@ -7,9 +7,10 @@ own remote control (the OBS WebSocket server), and saves the file next to the
 page. No account, nothing uploaded.
 
 The video holds **the page only**: no PageWell player, no floating button, no
-progress bar, no sound button. A story plays from its finished cover (the first
+progress bar, no sound or caption button. A story plays from its finished cover (the first
 frame, which apps use as the thumbnail) to its last slide on its own clock, with
-its narration if it has one (`references/voice.md`). A game is played by a
+its narration if it has one (`references/voice.md`) and captions of that
+narration, always on. A game is played by a
 person, in an OBS window.
 
 ## When

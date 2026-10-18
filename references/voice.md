@@ -75,6 +75,10 @@ cuts off one that is still playing, so keep them short.
   the narration on, starting the current slide's line from where the slide is.
   It is built in: never add your own sound button, `<audio controls>` or
   autoplaying audio to a story.
+- **Captions**: the line being said shows at the bottom of the stage, a
+  sentence at a time, taken from `data-narration` — so write it as it should
+  read, too. On the web they are on by default and the CC button (or `C`)
+  turns them off; in a recording they are always on.
 - **A game** speaks after its first tap.
 - **A recording** (`pagewell record`) plays the narration by itself.
 

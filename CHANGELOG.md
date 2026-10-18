@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.12.1 — 2026-10-18
+
+Stories with a voice now show captions of the line being said: on by default on the web (a CC button or C turns them off), always on in videos made with pagewell record.
+
+Source commit `2ab7670`. Update with `pagewell upgrade`.
+
 ## v0.12.0 — 2026-10-18
 
 New: pagewell voice gives a story or a game a voice with Qwen TTS (your own DASHSCOPE_API_KEY): each slide reads its data-narration line, timed to it; games get named voice lines played with pagewell.say(). New: pagewell record turns a story or a game into a 1080x1920 MP4 with OBS Studio on your computer (OBS WebSocket) — the page only, no player chrome; record --check walks through setting OBS up. Audio files (.mp3 .m4a .wav) now upload with the page.

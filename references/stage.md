@@ -187,8 +187,10 @@ Space on a keyboard. After the last slide PageWell shows Replay and Share.
   so the slide stays as long as its line. On the web a voiced story opens
   silent — browsers allow no sound before a tap — and PageWell shows a sound
   button under the progress bar, top right; one tap turns the narration on
-  from where the slide is. Never add your own sound button, `<audio controls>`
-  or autoplaying audio to a story. Only when they ask for a voice:
+  from where the slide is. Captions of the line being said (from
+  `data-narration`) show at the bottom, on by default, with a CC button to
+  turn them off; videos always have them. Never add your own sound button,
+  captions, `<audio controls>` or autoplaying audio to a story. Only when they ask for a voice:
   `references/voice.md`.
 - **A game** makes its own sound effects (an `AudioContext` unlocked on
   `pointerup`, above) and can have voice lines:
