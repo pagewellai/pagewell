@@ -1,15 +1,16 @@
 ---
 name: pagewell
 description: >
-  Write and publish a document that looks designed — an article, a report, a
-  handbook — or a one-page artifact that runs in the browser: a principle
-  explainer, a vertical story that plays like a short video, a small game,
-  and hand back a link. Use for "write me an article", "explain
-  how X works with a demo", "make it vertical / like a reel", "make a game",
-  "publish this", in any language ("写篇文章", "原理演示", "竖屏", "小游戏");
-  also for templates, charts, published pages, X Article drafts ("发到 X 长文").
+  Write and publish a designed document — an article, a report — or a
+  one-page artifact that runs in the browser: a principle explainer, a
+  vertical story that plays like a short video, a small game; hand back a
+  link. A story or game can speak (Qwen TTS) and be recorded as an MP4 with
+  OBS. Use for "write an article", "explain X with a demo", "make it
+  vertical", "make a game", "publish", "voiceover", "record a video"
+  ("写篇文章", "竖屏", "小游戏", "配音", "录成视频"); also templates, charts,
+  X drafts ("发到 X 长文").
 metadata:
-  version: "v0.11.0"
+  version: "v0.12.0"
 ---
 
 # PageWell
@@ -27,6 +28,7 @@ to take the one the request calls for, read what it hands you, and follow it.
 | a page where the reader must see a mechanism work | `principle` (a running page, below) |
 | something **vertical that plays**: "like a short video / reel / TikTok / Stories", "one screen at a time", "vertical slides", "竖屏", "像短视频", "竖屏 PPT", a thread-style explainer for X | `story` (a running page that plays slide by slide) |
 | something **to play**: "a game", "a mini game", "an H5 game", "小游戏" | `game` (a running page, played with one thumb) |
+| a story or a game **that speaks**, or **a video** of one: "with a voiceover", "配音", "录成视频", "for Douyin / TikTok" | `story` / `game` as above, then `pagewell voice` (`references/voice.md`) and / or `pagewell record` (`references/recording.md`) |
 | a template by name (their own house template, say) | that one |
 
 `story` and `game` are **vertical**: a fixed 360 × 640 stage that PageWell plays
@@ -41,7 +43,9 @@ either — including its **phone rules** (no `vh`/`vw`, no CSS math to scale, no
 with a `click` fallback, drags on touch events with `preventDefault()` in
 `touchmove`, everything that matters between y = 48 and y = 592 because phones
 cut up to 48 px off the top and bottom; a game keeps its bottom-right corner
-free).
+free). When they ask for it, a story can speak — a line per slide, made into
+audio by `pagewell voice` — and either kind can be recorded as a 1080 × 1920
+video with OBS Studio on their computer (`pagewell record`).
 
 A résumé gets its own template later. Until then write it with `article` and
 say in one line that it is laid out as an article.
@@ -72,7 +76,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.11.0
+0  pagewell doctor --json --skill-version v0.12.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -100,6 +104,7 @@ text and the CLI; do not wait for the user to ask whether an update exists.
 4  pagewell check page.html --json     same three-round rule
 5  Read the rubric. First frame must work with JS off (noscript).
 6  pagewell preview                    the page itself; story / game open in the player
+     story / game that should speak: data-narration, then pagewell voice page.html --json (references/voice.md)
 
 ── then ──
 7  Publish: pagewell publish draft.md --json       → their Documents, images included
@@ -109,6 +114,7 @@ text and the CLI; do not wait for the user to ask whether an update exists.
      a Space only when the user named one. Never init / push to publish a piece
    Or export one HTML file. Already have one? `pagewell publish <file>`
    Want it on X as well? `pagewell x draft draft.md` (§Sending to X)
+   A video of a story / game? `pagewell record page.html --check --json`, then record (references/recording.md)
 8  Report: what you made, what you checked, what you had to make up
 ```
 
@@ -424,6 +430,8 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | Using an `artifact` template | Write **one HTML file**. No second page, no `fetch`, no `<form>` |
 | They want it vertical, "like a video", one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage, each with a `data-layout` and `data-tone` from the stage style; ≤ 140 characters each; no colours, fonts or sizes of your own; never build your own player, progress bar or autoplay (`references/stage.md`) |
 | They want something to play | `game`. Starts on an HTML start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause`; the score and messages are the style's HTML, the canvas draws with `pagewell.colors` (`references/stage.md`) |
+| They want a story or game to speak | Write `data-narration` (a slide's spoken line, or `<audio data-say>` in a game), run `pagewell voice`. It uses the user's own Qwen TTS key (`DASHSCOPE_API_KEY`) and bills their account — only when they ask. On `tts_key_missing` tell them how to set it; **never ask for the key in the chat**. Never add your own sound button or `<audio>` player to a story (`references/voice.md`) |
+| They want a video of a story or game | `pagewell record --check` first and relay its `steps` (install OBS, turn on its WebSocket server); then `pagewell record`. A game is played by a person in OBS's Interact window — say so before running. **Never stop their own OBS recording or stream** (`obs_busy`), never ask for the OBS password (`references/recording.md`) |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
 | A required input is missing | **Ask.** Never invent it |
 | `check` reports errors | Do not push, do not export |
@@ -458,7 +466,9 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
    say it is one page, sandboxed, and cannot reach the network. For a `story`
    or `game`, say how it opens: as a vertical player — full screen on a phone,
    a centred phone on a computer, the same inside X — and that the link posted
-   on X shows a card with its first screen in a phone ("Story" / "Game").
+   on X shows a card with its first screen in a phone ("Story" / "Game"). If it
+   speaks, say that it opens silent and the sound button turns the voice on. If
+   they might post it as a video, offer `pagewell record` in one line.
 2. **What you checked** — "5 sections, 1,420 words, summary 98 characters, all
    3 images have alt text". The user does not know these checks exist; this
    sentence is how they learn what they are getting.
@@ -477,7 +487,9 @@ This file is the whole normal flow. Load one of these only when you hit it:
 | `templates.md` | which template a request gets, writing a house template |
 | `components.md` | building a component, or one is not doing what you meant |
 | `artifact.md` | writing a running page: single-file contract, checks, vs embed |
-| `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, the stage style (layouts, tones, components), slides, timing, input, X |
+| `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, the stage style (layouts, tones, components), slides, timing, input, sound, X |
+| `voice.md` | a story or game that speaks: `data-narration`, `pagewell voice`, the Qwen TTS key |
+| `recording.md` | a video of a story or game: OBS set-up, `pagewell record` |
 | `libraries.md` | diagrams, formulas, interactive charts, animation, `embed` |
 | `charts.md` | a ` ```chart ` is not doing what you meant |
 | `cli.md` | exact flags, share modes, the JSON shapes, `x draft` |

@@ -40,6 +40,35 @@ The CLI adds its own:
 | `network` | Cannot reach the server |
 | `engine_outdated` | This template needs a newer renderer than the CLI has. **Run `scripts/install.sh` and try again.** Do not fall back to another template — the user picked that one, and quietly using a different one is how they never find out |
 | `template_not_certified` | The version's own samples do not pass its own checks, so it cannot go on the shelf. `pagewell templates validate <id>` names them |
+| `interrupted` | Ctrl-C (or the harness stopped the command) before anything was produced. Nothing is half-done: `voice` kept the lines it had made, `record` put OBS back |
+
+`pagewell voice` (`references/voice.md`):
+
+| code | Meaning |
+|---|---|
+| `tts_key_missing` | No Qwen TTS key in the environment (`DASHSCOPE_API_KEY` or `TTS_KEY`). **Tell them how to add it to their shell profile; never ask for the key in the chat** |
+| `tts_rejected` | Qwen TTS refused: the message is its own words — a voice it does not have, a key it does not accept (keys belong to a region), a model not enabled for the account. Fix what it names; do not retry unchanged |
+| `tts_failed` | Network or the service failed after several retries. The lines made so far are kept; run the same command again later |
+
+`pagewell record` (`references/recording.md`). The `hint` is the step the user takes — relay it:
+
+| code | Meaning |
+|---|---|
+| `not_stage` | The page is not a story or a game; only those can be recorded |
+| `obs_not_installed` | OBS Studio is not on this computer |
+| `obs_not_running` | OBS is closed and could not be opened (or `--no-launch`) |
+| `obs_websocket_off` | OBS's remote control is off: Tools → WebSocket Server Settings → Enable WebSocket server. Also when OBS opened in Safe Mode |
+| `obs_auth_failed` | OBS wants a WebSocket password and the one available (OBS's own, or `OBS_WEBSOCKET_PASSWORD`) did not match. **Never ask for the password in the chat** |
+| `obs_too_old` | Whatever answers at that address is not obs-websocket 5 — OBS older than 28, or another program on the port |
+| `obs_not_ready` | OBS is still starting, usually behind a dialog (first-run wizard, "run in Safe Mode?", missing files) |
+| `obs_unreachable` | OBS on another computer cannot be reached at `--obs-url` |
+| `obs_busy` | OBS is already recording, streaming or running its virtual camera. **Never stop it yourself** — ask them to |
+| `obs_no_browser_source` | This OBS build has no Browser Source (some Linux packages); install OBS from obsproject.com or the Flatpak |
+| `obs_page_unreachable` | OBS's browser source could not load the page from this computer (OBS elsewhere, a firewall) |
+| `obs_black_frames` | The browser source draws black — on macOS, turn off Browser Source Hardware Acceleration and restart OBS |
+| `obs_page_timeout` | The page did not finish loading in OBS; the message names the script error when there is one — check it with `pagewell preview` |
+| `obs_record_failed` | OBS would not start (or change for) the recording; the message has OBS's own words |
+| `obs_disconnected` | OBS quit or dropped the connection mid-way |
 
 ## Order to follow when storage runs out
 

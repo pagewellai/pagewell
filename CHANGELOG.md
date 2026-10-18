@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.12.0 — 2026-10-18
+
+New: pagewell voice gives a story or a game a voice with Qwen TTS (your own DASHSCOPE_API_KEY): each slide reads its data-narration line, timed to it; games get named voice lines played with pagewell.say(). New: pagewell record turns a story or a game into a 1080x1920 MP4 with OBS Studio on your computer (OBS WebSocket) — the page only, no player chrome; record --check walks through setting OBS up. Audio files (.mp3 .m4a .wav) now upload with the page.
+
+Source commit `65aa2d3`. Update with `pagewell upgrade`.
+
 ## v0.11.0 — 2026-10-17
 
 Story and game pages now wear PageWell's stage style (stage-1). The scaffolds declare <meta name="pagewell:style" content="stage-1"> and build every screen from its layouts (data-layout), tones (data-tone: ink, pine, paper, mint) and components; PageWell adds the styles when the page is served, in preview and in export. pagewell check warns about colours, fonts and font sizes written by hand and about unknown layouts or tones. Canvas games get pagewell.colors, pagewell.font and pagewell.fit(). Templates story and game 1.1.0; references/stage.md has a new section, The style.

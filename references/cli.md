@@ -510,6 +510,106 @@ have to travel with the HTML.
 `--target` currently accepts `html`. Other targets are platform code, not
 configuration; adding one needs a release.
 
+## voice
+
+```
+pagewell voice <page.html> [--voice NAME] [--language LANG] [--model MODEL]
+                           [--force] [--dry-run] [--json]
+```
+
+Reads every `data-narration` line in a story or a game aloud with Qwen TTS and
+writes the audio next to the page, in `voice/`: a slide (`data-slide`) gets
+`data-voice` and `data-duration`, an `<audio data-say="name">` gets `src`. The
+page is rewritten in place, byte for byte except those attributes, and only when
+every line succeeded. Lines whose audio already exists are reused (no network,
+no cost); `--force` makes them all again. `--dry-run` uses no network and writes
+nothing: it lists the lines, their characters and whether a key is present.
+Guidance: `references/voice.md`.
+
+The key comes from `DASHSCOPE_API_KEY` (or `TTS_KEY`) and never appears in the
+output. `--voice` defaults to `$QWEN_TTS_VOICE`, else `Kai`; `--model` to
+`$QWEN_TTS_MODEL`, else `qwen3-tts-flash`; `--language` to
+`$QWEN_TTS_LANGUAGE`, else the page's `<html lang>`, else `Auto`.
+`QWEN_TTS_BASE_URL` pins the endpoint; otherwise a key rejected by the Beijing
+endpoint is tried once on the international one.
+
+```json
+{"file": "story.html", "voice": "Kai", "model": "qwen3-tts-flash", "language": "Chinese",
+ "endpoint": "https://dashscope.aliyuncs.com/api/v1", "encoder": "ffmpeg", "key_present": true,
+ "lines": [{"target": "slide 1", "chars": 17, "audio": "voice/story-s01-b9f3a357.mp3",
+            "seconds": 3.44, "duration": 4.1, "status": "made"},
+           {"target": "say:go", "chars": 10, "audio": "voice/story-go-5a83c517.mp3",
+            "seconds": 2.0, "status": "reused"}],
+ "characters": 17, "seconds_total": 5.44, "changed": true, "warnings": []}
+```
+
+`status` is `made`, `reused` or (with `--dry-run`) `planned`. `characters`
+counts only what was sent this run. `encoder` is `ffmpeg` (MP3), `afconvert`
+(macOS, `.m4a`) or `none` (WAV, about six times larger — a warning says so).
+`unused`, when present, lists older files of this page in `voice/` that nothing
+refers to any more.
+Errors: `tts_key_missing`, `tts_rejected` (Qwen's own message: a bad voice, a key
+that is not accepted), `tts_failed` (network or the service, after retries —
+the lines made so far are kept), `validation_failed` (no `data-narration` in the
+page).
+
+## record
+
+```
+pagewell record <page.html> [-o FILE] [--size WxH] [--fps N] [--tail DUR]
+                            [--rounds N] [--max DUR] [--obs-url URL]
+                            [--no-launch] [--no-interact] [--json]
+pagewell record [<page.html>] --check [--json]
+```
+
+Plays a story or a game in OBS Studio on this computer, through OBS's WebSocket
+server, and saves a 9:16 video of the page alone. Guidance:
+`references/recording.md`.
+
+- `-o` defaults to the page's name with `.mp4`, next to it.
+- `--size` is the 360 × 640 stage times 2, 3, 4 or 6: `720x1280`,
+  `1080x1920` (default), `1440x2560`, `2160x3840`. `--fps` 24–60, default 30.
+- `--tail` keeps recording after the end: 1 s after a story's last slide, 3 s
+  after a game's last game-over screen. `--rounds` (game, default 1): stop after
+  that many game-over screens. `--max` caps the recording (a story: its length
+  plus a margin; a game: 10 minutes).
+- `--obs-url` defaults to `$OBS_WEBSOCKET_URL`, else the port in OBS's own
+  settings, else `ws://127.0.0.1:4455`. The password is `$OBS_WEBSOCKET_PASSWORD`,
+  else — for OBS on this computer — the one OBS stores. OBS on another computer
+  works too: it must be able to reach this one, and the video stays on that
+  computer (`obs_file`).
+- OBS not running → `record` opens it (`--no-launch` does not).
+  `--no-interact` keeps OBS's Interact window closed for a game.
+
+`--check` changes nothing:
+
+```json
+{"ready": false, "steps": ["In OBS: Tools → WebSocket Server Settings → tick “Enable WebSocket server” …"],
+ "obs": {"url": "ws://127.0.0.1:4455", "local": true, "installed": true, "app": "/Applications/OBS.app",
+         "running": true, "websocket": {"enabled": false, "port": 4455, "auth_required": true},
+         "password_from": "obs", "connected": false, "error_code": "obs_websocket_off"},
+ "ffmpeg": true,
+ "page": {"file": "/…/story.html", "display": "story", "slides": 8, "voiced": 8,
+          "estimated_seconds": 46.2, "output": "/…/story.mp4", "width": 1080, "height": 1920}}
+```
+
+When connected, `obs` also has `version`, `websocket_version`,
+`browser_source` and `busy`. The exit code is 1 when `ready` is false.
+
+A recording:
+
+```json
+{"file": "/…/story.mp4", "bytes": 14464169, "seconds": 46.8, "width": 1080, "height": 1920, "fps": 30,
+ "display": "story", "slides": 8, "audio": "narration", "stopped_by": "end", "complete": true,
+ "obs": "OBS 32.2.2 (obs-websocket 5.7.4)", "warnings": []}
+```
+
+`audio` is `narration`, `game` or `silent`; a game adds `rounds`. `stopped_by`
+is `end` (the story finished), `game_over` (the rounds were played), `obs`
+(someone pressed Stop Recording), `max`, `interrupt` (Ctrl-C — what was recorded
+is kept) or `obs_exit`. `page_errors` lists script errors the page threw while
+it played. A few progress lines go to stderr.
+
 ## brand
 
 ```

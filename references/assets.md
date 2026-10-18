@@ -66,11 +66,17 @@ from two documents, costs nothing the second time.
 | Images | `.png` `.jpg` `.jpeg` `.gif` `.webp` `.avif` `.svg` |
 | Documents and data | `.pdf` `.csv` `.json` `.txt` `.zip` |
 | Fonts | `.woff2` `.woff` |
+| Audio | `.mp3` `.m4a` `.wav` |
 | Size | **25 MiB each** (a document is 5 MiB) |
 
 Anything else is refused, and the message lists what is accepted. The type a
 reader's browser is told is decided **by the server from the extension** — not
 by anything the uploader sends.
+
+Audio is for stories and games: the narration of each slide and a game's voice
+lines. `pagewell voice` writes those files next to the page (`voice/…`), and
+`publish` uploads them with it, like images. MP3 is the small one — a WAV of
+the same line is about six times the size, so make it MP3 when you can.
 
 Video is not on that list yet. A short clip usually belongs on a video host,
 linked; the point of this list is files the document itself needs.

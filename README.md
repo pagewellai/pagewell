@@ -79,7 +79,7 @@ or update PageWell from the Plugins page.
 Every activation starts with a read-only check for both halves:
 
 ```bash
-pagewell doctor --json --skill-version v0.11.0
+pagewell doctor --json --skill-version v0.12.0
 ```
 
 If either half is behind, the JSON includes the exact next command. The manual
@@ -134,12 +134,12 @@ it executable. Nothing else is downloaded and nothing is compiled.
 
 | Platform | Binary | Size |
 |---|---|---|
-| darwin/amd64 | `pagewell_darwin_amd64` | 15M |
+| darwin/amd64 | `pagewell_darwin_amd64` | 16M |
 | darwin/arm64 | `pagewell_darwin_arm64` | 15M |
-| linux/amd64 | `pagewell_linux_amd64` | 15M |
-| linux/arm64 | `pagewell_linux_arm64` | 14M |
-| windows/amd64 | `pagewell_windows_amd64.exe` | 15M |
-| windows/arm64 | `pagewell_windows_arm64.exe` | 14M |
+| linux/amd64 | `pagewell_linux_amd64` | 16M |
+| linux/arm64 | `pagewell_linux_arm64` | 15M |
+| windows/amd64 | `pagewell_windows_amd64.exe` | 16M |
+| windows/arm64 | `pagewell_windows_arm64.exe` | 15M |
 
 ## First run
 

@@ -137,8 +137,8 @@ too long for the stage steps down a size instead of overflowing.
   turn the page). Mark anything else that should take taps with
   `data-interactive`.
 - **Never** build your own navigation, progress bar, autoplay timer, swipe
-  handling or "next" button — PageWell's are already there (and already work
-  on iPhones) and two of them fight.
+  handling, "next" button or sound button — PageWell's are already there (and
+  already work on iPhones) and two of them fight.
 
 What the reader can do (you do not implement it): tap the right two thirds →
 next, the left third → back, hold → pause, swipe → next / back, ←/→ and
@@ -178,6 +178,23 @@ Space on a keyboard. After the last slide PageWell shows Replay and Share.
   user gesture, and a context made there stays silent (on iOS, for good).
   Play effects from anywhere after that.
 - A light game: `<body data-tone="paper">` (or `mint`).
+
+## Sound
+
+- **A story can speak.** Write each slide's spoken line in `data-narration`
+  and run `pagewell voice story.html`: it makes the audio with Qwen TTS, saves
+  it next to the page and writes `data-voice` and `data-duration` on the slide,
+  so the slide stays as long as its line. On the web a voiced story opens
+  silent — browsers allow no sound before a tap — and PageWell shows a sound
+  button under the progress bar, top right; one tap turns the narration on
+  from where the slide is. Never add your own sound button, `<audio controls>`
+  or autoplaying audio to a story. Only when they ask for a voice:
+  `references/voice.md`.
+- **A game** makes its own sound effects (an `AudioContext` unlocked on
+  `pointerup`, above) and can have voice lines:
+  `<audio data-say="go" data-narration="Ready… go!"></audio>`, made by
+  `pagewell voice game.html` and played with `pagewell.say('go')` — it plays
+  nothing until the player's first tap. Its mute button mutes the lines too.
 
 ## Phone rules
 
@@ -220,6 +237,15 @@ phone. `pagewell check` flags the first block; fix every flag.
   in X, in WeChat / Feishu, in Safari — and tap through once. Say that a
   desktop preview cannot prove it works on a phone.
 
+## Recording a video
+
+`pagewell record story.html` plays the page in OBS Studio on this computer and
+saves a 1080 × 1920 MP4 of the page alone — no player, no floating button, no
+progress bar, no sound button — for Douyin, TikTok, Reels, Shorts or X. A story
+plays itself (with its voice); a game is played by a person in an OBS window.
+Check the computer first with `pagewell record story.html --check`. Everything
+else: `references/recording.md`.
+
 ## Check, preview, publish
 
 ```
@@ -235,8 +261,10 @@ sign-in (free); do not offer anonymous.
 `check` adds the stage rules to the artifact ones: the display value, the
 style and everything written around it (colours, fonts, font sizes, layouts,
 tones), the viewport, `data-slide` count and length, `data-duration`, video
-attributes, the phone rules above, and (for a game) that something listens to
-pointer events. Fix every warning before publishing.
+attributes, the phone rules above, the voice (a `data-narration` with no audio
+yet, a voiced slide with no `data-duration`, a voice line with no `src`) and
+(for a game) that something listens to pointer events. Fix every warning before
+publishing.
 
 ## What to tell the user
 
@@ -247,4 +275,6 @@ with a "Story" / "Game" label — it is ready a few seconds after publishing. A
 link that was already posted on X keeps its old card for a while; adding
 `?v=2` makes X fetch a new one. Mention that it is sandboxed and offline by
 design, and — for a game — that scores last only while the page is open. Ask
-them to open it on their phone once (X, WeChat / Feishu, Safari).
+them to open it on their phone once (X, WeChat / Feishu, Safari). If they might
+post it as a video (Douyin, TikTok, Reels), say in one line that
+`pagewell record` can turn it into a 1080 × 1920 MP4 with OBS on their computer.
