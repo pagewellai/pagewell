@@ -9,7 +9,9 @@ Two kinds of running page that PageWell **plays** instead of laying out:
 Both open the same way everywhere: full screen on a phone, a centred phone on a
 computer, and the same inside X's in-app browser. PageWell adds one control: a
 small floating button in the bottom-right corner (story and game alike) that
-opens a bar with the author, Copy link, Pause / Restart and ⋯. You write only what happens on the stage.
+opens a bar with the author, Copy link, Pause / Restart and ⋯. Adding `?toolbar=0`
+to the link shows the stage alone, without that button (for embedding or
+screen recording). You write only what happens on the stage.
 
 Both wear **PageWell's stage style** (`stage-1`, below): one set of layouts,
 type, colours and motion for every story and every game. You write the
