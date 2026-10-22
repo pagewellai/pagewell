@@ -10,7 +10,7 @@ description: >
   ("写篇文章", "竖屏", "小游戏", "配音", "录成视频"); also templates, charts,
   X drafts ("发到 X 长文").
 metadata:
-  version: "v0.12.1"
+  version: "v0.13.0"
 ---
 
 # PageWell
@@ -76,7 +76,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.12.1
+0  pagewell doctor --json --skill-version v0.13.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -114,7 +114,7 @@ text and the CLI; do not wait for the user to ask whether an update exists.
      a Space only when the user named one. Never init / push to publish a piece
    Or export one HTML file. Already have one? `pagewell publish <file>`
    Want it on X as well? `pagewell x draft draft.md` (§Sending to X)
-   A video of a story / game? `pagewell record page.html --check --json`, then record (references/recording.md)
+   A video of a story / game, or of a published link? `pagewell record <file|link> --check --json`, then record (references/recording.md)
 8  Report: what you made, what you checked, what you had to make up
 ```
 
@@ -431,7 +431,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | They want it vertical, "like a video", one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage, each with a `data-layout` and `data-tone` from the stage style; ≤ 140 characters each; no colours, fonts or sizes of your own; never build your own player, progress bar or autoplay (`references/stage.md`) |
 | They want something to play | `game`. Starts on an HTML start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause`; the score and messages are the style's HTML, the canvas draws with `pagewell.colors` (`references/stage.md`) |
 | They want a story or game to speak | Write `data-narration` (a slide's spoken line, or `<audio data-say>` in a game), run `pagewell voice`. It uses the user's own Qwen TTS key (`DASHSCOPE_API_KEY`) and bills their account — only when they ask. On `tts_key_missing` tell them how to set it; **never ask for the key in the chat**. Never add your own sound button or `<audio>` player to a story (`references/voice.md`) |
-| They want a video of a story or game | `pagewell record --check` first and relay its `steps` (install OBS, turn on its WebSocket server); then `pagewell record`. A game is played by a person in OBS's Interact window — say so before running. **Never stop their own OBS recording or stream** (`obs_busy`), never ask for the OBS password (`references/recording.md`) |
+| They want a video of a story or game — or of any page they published | `pagewell record --check` first and relay its `steps` (install OBS, turn on its WebSocket server); then `pagewell record <file or link>`. A link gets `?toolbar=0` and a phone layout by itself; an ordinary page needs `--seconds`. A game is played by a person in OBS's Interact window — say so before running. **Never stop their own OBS recording or stream** (`obs_busy`), never ask for the OBS password (`references/recording.md`) |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
 | A required input is missing | **Ask.** Never invent it |
 | `check` reports errors | Do not push, do not export |

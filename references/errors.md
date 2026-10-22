@@ -54,7 +54,8 @@ The CLI adds its own:
 
 | code | Meaning |
 |---|---|
-| `not_stage` | The page is not a story or a game; only those can be recorded |
+| `not_stage` | The local file is not a story or a game; only those can be recorded from a file (a link to any page works) |
+| `link_unavailable` | The link does not open for anyone (private, revoked, expired, or behind a code / password). Record the local file, or make a share link |
 | `obs_not_installed` | OBS Studio is not on this computer |
 | `obs_not_running` | OBS is closed and could not be opened (or `--no-launch`) |
 | `obs_websocket_off` | OBS's remote control is off: Tools → WebSocket Server Settings → Enable WebSocket server. Also when OBS opened in Safe Mode |

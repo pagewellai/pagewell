@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.13.0 — 2026-10-22
+
+pagewell record now takes a link to a published PageWell page: it adds ?toolbar=0 and records the page as a phone shows it (laid out 390 px wide, drawn sharp at 1080x1920). Stories and games behind a link record like local files (narration, captions, stop at the end); other pages record for --seconds or until Stop in OBS.
+
+Source commit `e2b6a42`. Update with `pagewell upgrade`.
+
 ## v0.12.1 — 2026-10-18
 
 Stories with a voice now show captions of the line being said: on by default on the web (a CC button or C turns them off), always on in videos made with pagewell record.

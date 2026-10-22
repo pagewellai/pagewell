@@ -16,9 +16,32 @@ person, in an OBS window.
 ## When
 
 When they ask for a video: an MP4, a clip, "record it", "export it as a
-video", "录成视频", "导出视频", "发抖音 / 视频号 / TikTok". Only a `story` or a
-`game` can be recorded — anything else answers `not_stage` (an article has no
-timeline to play). If the video should speak, run `pagewell voice` first.
+video", "录成视频", "导出视频", "发抖音 / 视频号 / TikTok". A local file must be a
+`story` or a `game` (`not_stage` otherwise — an article has no timeline to
+play); a **link** to any published PageWell page can be recorded (below). If the video should speak, run `pagewell voice` first.
+
+## A link instead of a file
+
+`pagewell record` also takes a link to a page that is already published:
+
+```
+pagewell record https://p.pagewell.ai/s/7BT59JZCA53S9YG91HKXYXRAT8 --seconds 30s --json
+```
+
+It adds `?toolbar=0` to the link by itself (the page alone: no PageWell bar,
+contents, previous / next or footer) and records it **the way a phone shows
+it**: the page is laid out at a phone's width (390 px) and drawn at 1080 × 1920,
+sharp. A story or a game behind the link is recorded exactly like a local file
+(narration, captions, it stops at the end). Any other page — a sandboxed web
+page, an article — has no end of its own: give `--seconds`, or it records until
+someone presses Stop Recording in OBS (at most `--max`, 2 minutes). OBS's
+Interact window opens on it, for scrolling or tapping while it records.
+
+The link must open for anyone: public or unlisted. A private page, a revoked or
+expired share, or one behind a code or a password answers `link_unavailable` —
+record the local file, or make a share link first. The file is named after the
+link (`7BT59JZCA53S9YG91HKXYXRAT8.mp4`) in the current folder unless `-o` says
+otherwise.
 
 ## 1 · Check the computer
 

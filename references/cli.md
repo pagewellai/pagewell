@@ -556,17 +556,23 @@ page).
 ## record
 
 ```
-pagewell record <page.html> [-o FILE] [--size WxH] [--fps N] [--tail DUR]
-                            [--rounds N] [--max DUR] [--obs-url URL]
-                            [--no-launch] [--no-interact] [--json]
-pagewell record [<page.html>] --check [--json]
+pagewell record <page.html | link> [-o FILE] [--size WxH] [--fps N] [--tail DUR]
+                                   [--rounds N] [--seconds DUR] [--max DUR] [--obs-url URL]
+                                   [--no-launch] [--no-interact] [--json]
+pagewell record [<page.html | link>] --check [--json]
 ```
 
 Plays a story or a game in OBS Studio on this computer, through OBS's WebSocket
 server, and saves a 9:16 video of the page alone. Guidance:
 `references/recording.md`.
 
-- `-o` defaults to the page's name with `.mp4`, next to it.
+- A link (`https://p.pagewell.ai/s/…`) is recorded with `?toolbar=0` added and
+  laid out at a phone's width (390 px) at the video size. A story or game behind
+  it records like a local file; any other page records for `--seconds`, or until
+  Stop Recording in OBS (at most `--max`, 2 minutes). It must be public or
+  unlisted (`link_unavailable` otherwise).
+- `-o` defaults to the page's name with `.mp4`, next to it; for a link, the last
+  part of the link in the current folder.
 - `--size` is the 360 × 640 stage times 2, 3, 4 or 6: `720x1280`,
   `1080x1920` (default), `1440x2560`, `2160x3840`. `--fps` 24–60, default 30.
 - `--tail` keeps recording after the end: 1 s after a story's last slide, 3 s
@@ -604,8 +610,10 @@ A recording:
  "obs": "OBS 32.2.2 (obs-websocket 5.7.4)", "warnings": []}
 ```
 
-`audio` is `narration`, `game` or `silent`; a game adds `rounds`. `stopped_by`
-is `end` (the story finished), `game_over` (the rounds were played), `obs`
+`audio` is `narration`, `game`, `silent` or — for an ordinary page from a link —
+`page` (with `display: "page"` and `link`); a game adds `rounds`. `stopped_by`
+is `end` (the story finished), `game_over` (the rounds were played), `time`
+(`--seconds` were recorded), `obs`
 (someone pressed Stop Recording), `max`, `interrupt` (Ctrl-C — what was recorded
 is kept) or `obs_exit`. `page_errors` lists script errors the page threw while
 it played. A few progress lines go to stderr.
