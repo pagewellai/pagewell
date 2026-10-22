@@ -2,8 +2,9 @@
 
 Two kinds of running page that PageWell **plays** instead of laying out:
 
-- **story** — a sequence of full-screen vertical slides that advances on its
-  own, like a short video or Instagram Stories. Tap to go on, hold to pause.
+- **story** — full-screen vertical slides that play by themselves like a
+  narrated slideshow: every slide speaks its line (Qwen TTS) and moves on when
+  the line ends. It records to a video as it is.
 - **game** — a small game on a vertical stage, played with one thumb.
 
 Both open the same way everywhere: full screen on a phone, a centred phone on a
@@ -13,15 +14,17 @@ opens a bar with the author, Copy link, Pause / Restart and ⋯. Adding `?toolba
 to the link shows the stage alone, without that button (for embedding or
 screen recording). You write only what happens on the stage.
 
-Both wear **PageWell's stage style** (`stage-1`, below): one set of layouts,
-type, colours and motion for every story and every game. You write the
-content and pick a layout; you do not design.
+**A story is yours to design** — layout, colours, fonts, motion, how many
+slides and how much on each. It has two requirements: it plays by itself, and
+every slide speaks (§story). **A game wears PageWell's stage style** (`stage-1`,
+below): you write the game and pick from the style; you do not design. A story
+may use the style too, when a ready-made look suits it.
 
 ## Which one
 
 | The request | Template |
 |---|---|
-| "make it vertical", "like a short video / reel / TikTok / Stories", "one screen at a time", "vertical slides", "for X", "竖屏", "像短视频" | `story` |
+| "make it vertical", "like a short video / reel / TikTok / Stories", "one screen at a time", "vertical slides", "a slideshow that plays itself", "for X", "竖屏", "像短视频", "自动播放的 PPT" | `story` |
 | "a game", "a mini game", "something to play", "小游戏" | `game` |
 | "explain how X works with a demo" (one control, one mechanism) | `principle` — not a story |
 | "an article" that also has a demo | `article` + one `embed` |
@@ -33,9 +36,9 @@ pagewell templates use story -o story.html     # or: game -o game.html
 ## The stage — both kinds
 
 - One HTML file declaring
-  `<meta name="pagewell:display" content="story">` (or `game`),
-  `<meta name="pagewell:style" content="stage-1">` and
-  `<meta name="viewport" content="width=360">`. The scaffold has all three.
+  `<meta name="pagewell:display" content="story">` (or `game`) and
+  `<meta name="viewport" content="width=360">` — a game also
+  `<meta name="pagewell:style" content="stage-1">`. The scaffolds have them.
 - The stage is **360 × 640 CSS px** (9:16): `<body>` is laid out at exactly
   that size and PageWell scales it to the screen like a video. **Design for
   exactly that size.** No media queries, no `vw` maths, no scaling yourself.
@@ -45,9 +48,9 @@ pagewell templates use story -o story.html     # or: game -o game.html
   `{x, y}` on the stage (0–360 × 0–640; touch events work too), or for a
   canvas `(e.clientX - rect.left) * 360 / rect.width`.
 - **Safe zone: y 48–592.** On most phones the stage fills the width and up to
-  48 px at the top and at the bottom are cut off. The style already pads every
-  slide and places the game's screens and HUD inside it; anything you draw
-  yourself keeps text, buttons and scores between y = 48 and y = 592.
+  48 px at the top and at the bottom are cut off. Keep text, buttons and
+  scores between y = 48 and y = 592 (the style already pads its slides and
+  places the game's screens and HUD inside it).
   `pagewell.visible` tells you `{top, bottom}`.
 - Images: a relative path next to the file (`publish` uploads it), `data:`, or
   inline SVG. Keep each under 300 KB and the HTML under 1 MiB — it must open in
@@ -59,13 +62,13 @@ pagewell templates use story -o story.html     # or: game -o game.html
 - The artifact rules still apply: no `fetch`, no `<form>`, no second page, no
   remote scripts, and a `<noscript>` that says what it is.
 
-## The style — `stage-1`
+## The style — `stage-1` (every game; a story when you choose it)
 
 PageWell adds the style when it serves the page (and in `pagewell preview` and
 `pagewell export`): every size, colour, font and entrance animation. Your file
 holds content, `data-layout`, `data-tone` and the style's classes.
 
-**Write no CSS for colours, fonts or font sizes.** `pagewell check` warns about
+**On a page that declares it, write no CSS for colours, fonts or font sizes.** `pagewell check` warns about
 every colour (`#hex`, `rgb()`, `hsl()`, a colour name) in CSS, in SVG
 attributes and in scripts, every `font-family`, every font size off the scale,
 and every layout or tone the style does not have — fix each one. Colours are
@@ -92,55 +95,69 @@ too long for the stage steps down a size instead of overflowing.
 
 ## story
 
+A story is a slideshow that plays itself and speaks. **Two requirements, and
+nothing else is prescribed:**
+
+1. **It plays by itself.** One `<section data-slide>` per slide, in order;
+   PageWell shows one at a time and moves on when the slide's line ends. Never
+   write `<meta name="pagewell:autoplay" content="off">`, and never advance
+   slides from a timer of your own.
+2. **Every slide speaks.** Its spoken line goes in `data-narration` — the
+   words to say, not a copy of the slide — and `pagewell voice story.html`
+   makes the audio and sets each slide's `data-duration` to its line
+   (`references/voice.md`). `check` warns about a slide with no line.
+
 ```html
-<section data-slide data-layout="cover">
-  <p class="kicker">Physics in eight slides</p>
+<style>
+  body { background: #0e1a2b; color: #f4efe6; font-family: Georgia, serif; }
+  [data-slide] { padding: 72px 28px; }
+  [data-slide][data-active] h1 { animation: rise .7s ease-out both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+</style>
+<section data-slide data-narration="Why is the sky blue? The answer is in the air.">
   <h1>Why is the sky blue?</h1>
-  <p class="lead">Sunlight is white. The air picks out the blue.</p>
 </section>
-<section data-slide data-layout="number">
-  <p class="kicker">Air</p>
-  <p class="big">1,000<small>×</small></p>
-  <p class="lead">Air molecules are over a thousand times smaller than a wave of light.</p>
-</section>
-<section data-slide data-tone="paper">
-  <h2>At sunset, the path is long</h2>
-  <ol class="steps"><li><b>Light crosses far more air</b></li><li><b>The blue scatters away</b></li></ol>
-</section>
-<section data-slide data-layout="end">
-  <h2>Tiny things scatter short waves.</h2>
+<section data-slide data-narration="Air molecules are a thousand times smaller than a wave of light.">
+  …
 </section>
 <noscript>The whole story in one paragraph.</noscript>
 ```
 
-- **One `<section data-slide>` per screen**, in order. Each fills the stage;
-  only one shows at a time. Give each one layout and, if it should not be
-  dark, one tone. **Never two slides in a row with the same layout and the
-  same tone** — that is what makes a story read as a slideshow.
-- **The cover is also the link preview.** PageWell photographs the first slide
-  (after its entrance animations finish) and puts it in the card X, WeChat and
-  Slack show for the link. Make it readable at a glance: a short title, a
-  one-line hook, nothing important in the bottom-right corner (a small play
-  badge sits there on the card).
-- 3–12 slides is the sweet spot; 20 is a lot; 40 is the limit.
-- **At most 140 characters of text per slide.** Split, don't shrink.
-- How long a slide stays: the length of its text (about reading time + 2 s,
-  between 4 and 12 s). Set `data-duration="7"` (2–30) on a slide with a
-  diagram or a number that needs a beat longer.
-- `<meta name="pagewell:autoplay" content="off">` makes it a tap-through deck
-  instead (slides wait for a tap). Default is autoplay.
-- The progress bar sits at the top of the visible area; on a light tone
-  PageWell draws it dark. Holding a finger down pauses every animation.
-- JavaScript on a slide (a canvas, a counter) listens for `pagewell:slide`
-  (`event.detail.index`), `pagewell:pause`, `pagewell:play`, `pagewell:end`
-  on `window`. `window.pagewell` has `next()`, `prev()`, `goTo(i)`, `play()`,
-  `pause()`, `restart()` and read-only `index`, `count`, `paused`.
+Everything else — layout, colours, fonts, sizes, drawings, canvas, motion,
+how many slides (up to 40) and how much on each — is your design. What keeps
+it playing on a phone and recording cleanly:
+
+- **Motion starts when its slide shows.** Every slide is laid out from the
+  start and only made visible in turn, so key CSS animations to
+  `[data-slide][data-active]` (an unkeyed one has finished before its slide
+  appears). Script motion (a canvas, a counter) starts on `pagewell:slide`
+  (`event.detail.index`) when `pagewell.paused` is false, stops on
+  `pagewell:pause` and resumes on `pagewell:play`; `pagewell:end` follows the
+  last slide. PageWell pauses CSS animations itself while the story is paused.
+- **Recording** (`pagewell record`, below) uses the same page: the first slide
+  is held — its entrance finished, paused — until the recording starts, then
+  the story plays with its voice and the recording stops after the last slide.
+  A page that follows the line above records as it plays.
+- **No sound of your own** — no `<audio>`, no music, no sound button. The
+  narration is the sound; PageWell's sound button (top right) turns it on, and
+  captions of the line show at the bottom (keep that strip calm).
+- Give `body` one opaque background colour (or each slide its own): a screen
+  that is not 9:16 shows it around the stage.
+- **The first slide is also the link preview.** PageWell photographs it (after
+  its entrance animations) for the card X, WeChat and Slack show. Make it
+  readable at a glance; nothing important in the bottom-right corner.
+- `window.pagewell` has `next()`, `prev()`, `goTo(i)`, `play()`, `pause()`,
+  `restart()` and read-only `index`, `count`, `paused` — for a button on a
+  slide, never for timing.
 - Buttons, links and inputs on a slide work normally (a tap on them does not
   turn the page). Mark anything else that should take taps with
   `data-interactive`.
 - **Never** build your own navigation, progress bar, autoplay timer, swipe
-  handling, "next" button or sound button — PageWell's are already there (and
-  already work on iPhones) and two of them fight.
+  handling or sound button — PageWell's are already there (and already work
+  on iPhones) and two of them fight.
+- With the stage style (`<meta name="pagewell:style" content="stage-1">`):
+  each slide takes a `data-layout` and a `data-tone` from the table above, and
+  `check` holds the page to the style.
 
 What the reader can do (you do not implement it): tap the right two thirds →
 next, the left third → back, hold → pause, swipe → next / back, ←/→ and
@@ -183,7 +200,7 @@ Space on a keyboard. After the last slide PageWell shows Replay and Share.
 
 ## Sound
 
-- **A story can speak.** Write each slide's spoken line in `data-narration`
+- **A story speaks — always.** Write each slide's spoken line in `data-narration`
   and run `pagewell voice story.html`: it makes the audio with Qwen TTS, saves
   it next to the page and writes `data-voice` and `data-duration` on the slide,
   so the slide stays as long as its line. On the web a voiced story opens
@@ -192,7 +209,7 @@ Space on a keyboard. After the last slide PageWell shows Replay and Share.
   from where the slide is. Captions of the line being said (from
   `data-narration`) show at the bottom, on by default, with a CC button to
   turn them off; videos always have them. Never add your own sound button,
-  captions, `<audio controls>` or autoplaying audio to a story. Only when they ask for a voice:
+  captions, `<audio controls>` or autoplaying audio to a story.
   `references/voice.md`.
 - **A game** makes its own sound effects (an `AudioContext` unlocked on
   `pointerup`, above) and can have voice lines:
@@ -214,7 +231,7 @@ phone. `pagewell check` flags the first block; fix every flag.
 | `AudioContext` made in `pointerdown` | silent forever on iOS | make / `resume()` it in `pointerup`, `touchend`, `keydown` |
 | `alert` / `confirm` / `prompt` | the sandbox has no dialogs: nothing shows, the game hangs | draw it on the stage |
 | `requestFullscreen` | missing on iPhone and in X | leave it to PageWell's ⋯ |
-| a page without the style and without a background colour on `body` (or on each slide) | the space around the stage on a screen that is not 9:16 is filled with the page's own colour — without one it is black bars | declare the style (it gives every slide and the body a background) |
+| a page without the style and without a background colour on `body` (or on each slide) | the space around the stage on a screen that is not 9:16 is filled with the page's own colour — without one it is black bars | one opaque `background` on `body` (or each slide) — or declare the style, which gives one |
 | `clientX` / `pageX` used as stage coordinates | the stage is scaled; window coordinates land somewhere else | `pagewell.point(event)` |
 | drags or swipes handled with `pointermove` only | on iPhones the in-app browser takes horizontal drags over: the page gets `pointercancel`, never `pointerup`, and nothing moves | on touch devices use `touchstart` / `touchmove` / `touchend` and call `preventDefault()` in `touchmove` (listener with `{ passive: false }`); keep pointer events for the mouse |
 | a game that handles `pointerdown` but not `click` | where only a `click` arrives (a keyboard, some in-app browsers) a tap does nothing | the `pointerdown` + `click` fallback below |
@@ -263,8 +280,9 @@ Publishing one needs an account: anonymous pages run no scripts, so
 sign-in (free); do not offer anonymous.
 
 `check` adds the stage rules to the artifact ones: the display value, the
-style and everything written around it (colours, fonts, font sizes, layouts,
-tones), the viewport, `data-slide` count and length, `data-duration`, video
+style when one is declared (colours, fonts, font sizes, layouts, tones; a game
+without it gets a warning), the viewport, the slide count (40 at most), a story
+slide with no line or autoplay turned off, `data-duration`, video
 attributes, the phone rules above, the voice (a `data-narration` with no audio
 yet, a voiced slide with no `data-duration`, a voice line with no `src`) and
 (for a game) that something listens to pointer events. Fix every warning before
@@ -273,7 +291,8 @@ publishing.
 ## What to tell the user
 
 Say it is a vertical story (or game) that plays full screen on a phone, as a
-centred phone on a computer, and the same inside X, in PageWell's own look.
+centred phone on a computer, and the same inside X; a story plays by itself
+and speaks (it opens silent; the sound button turns the voice on).
 When they post the link on X, the card shows the first screen inside a phone,
 with a "Story" / "Game" label — it is ready a few seconds after publishing. A
 link that was already posted on X keeps its old card for a while; adding

@@ -3,14 +3,14 @@ name: pagewell
 description: >
   Write and publish a designed document — an article, a report — or a
   one-page artifact that runs in the browser: a principle explainer, a
-  vertical story that plays like a short video, a small game; hand back a
-  link. A story or game can speak (Qwen TTS) and be recorded as an MP4 with
-  OBS. Use for "write an article", "explain X with a demo", "make it
+  vertical story that plays itself like a narrated slideshow (Qwen TTS), a
+  small game; hand back a link. A story or game can be recorded as an MP4
+  with OBS. Use for "write an article", "explain X with a demo", "make it
   vertical", "make a game", "publish", "voiceover", "record a video"
   ("写篇文章", "竖屏", "小游戏", "配音", "录成视频"); also templates, charts,
   X drafts ("发到 X 长文").
 metadata:
-  version: "v0.13.1"
+  version: "v0.14.0"
 ---
 
 # PageWell
@@ -26,26 +26,29 @@ to take the one the request calls for, read what it hands you, and follow it.
 |---|---|
 | any document — an article, a post, a report, a guide, a one-pager | `article` (the only document template for now) |
 | a page where the reader must see a mechanism work | `principle` (a running page, below) |
-| something **vertical that plays**: "like a short video / reel / TikTok / Stories", "one screen at a time", "vertical slides", "竖屏", "像短视频", "竖屏 PPT", a thread-style explainer for X | `story` (a running page that plays slide by slide) |
+| something **vertical that plays**: "like a short video / reel / TikTok / Stories", "one screen at a time", "vertical slides", "a slideshow that plays itself", "竖屏", "像短视频", "竖屏 PPT", "自动播放的 PPT", a thread-style explainer for X | `story` (a narrated slideshow that plays by itself) |
 | something **to play**: "a game", "a mini game", "an H5 game", "小游戏" | `game` (a running page, played with one thumb) |
 | a story or a game **that speaks**, or **a video** of one: "with a voiceover", "配音", "录成视频", "for Douyin / TikTok" | `story` / `game` as above, then `pagewell voice` (`references/voice.md`) and / or `pagewell record` (`references/recording.md`) |
 | a template by name (their own house template, say) | that one |
 
 `story` and `game` are **vertical**: a fixed 360 × 640 stage that PageWell plays
 like a video — full screen on a phone, a centred phone on a computer, the same
-inside X's in-app browser, PageWell's bar underneath. Both wear **PageWell's
-stage style** (`<meta name="pagewell:style" content="stage-1">`, in the
-scaffold): you pick a layout and a tone per slide and build from its
-components — **no colours, fonts or font sizes of your own**; `check` warns
-about each one. The rules are in `references/stage.md`; read it before writing
-either — including its **phone rules** (no `vh`/`vw`, no CSS math to scale, no
+inside X's in-app browser, PageWell's bar underneath. **A story is a
+slideshow that plays by itself and speaks**: one `<section data-slide>` per
+slide, every slide with its spoken line in `data-narration`, made into audio
+by `pagewell voice` (always — not only when asked); the slide moves on when its
+line ends. Beyond that **its design is yours** — layout, colours, fonts,
+motion, how much on each slide. **A game wears PageWell's stage style**
+(`<meta name="pagewell:style" content="stage-1">`, in the scaffold): no
+colours, fonts or font sizes of its own; `check` warns about each one. The
+rules are in `references/stage.md`; read it before writing either — including its **phone rules** (no `vh`/`vw`, no CSS math to scale, no
 `innerWidth`, sound unlocked on `pointerup`, no `alert`, taps on `pointerdown`
 with a `click` fallback, drags on touch events with `preventDefault()` in
 `touchmove`, everything that matters between y = 48 and y = 592 because phones
-cut up to 48 px off the top and bottom; a game keeps its bottom-right corner
-free). When they ask for it, a story can speak — a line per slide, made into
-audio by `pagewell voice` — and either kind can be recorded as a 1080 × 1920
-video with OBS Studio on their computer (`pagewell record`).
+cut up to 48 px off the top and bottom; the bottom-right corner stays
+free). A story's motion starts when its slide shows (`[data-slide][data-active]`,
+`pagewell:slide`), so the same page records as a 1080 × 1920 video with OBS
+Studio on their computer (`pagewell record`); a game can be recorded too.
 
 A résumé gets its own template later. Until then write it with `article` and
 say in one line that it is laid out as an article.
@@ -76,7 +79,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.13.1
+0  pagewell doctor --json --skill-version v0.14.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -100,11 +103,12 @@ text and the CLI; do not wait for the user to ask whether an update exists.
 2  COLLECT EVERY REQUIRED INPUT before writing a word
 3  Write ONE html file. Replace every ⟦…⟧.
      No second page. No fetch. No form. State stays in memory.
-     story / game: the stage style's layouts and components, no colours / fonts / sizes
+     story: free design; a data-narration line on every slide; never autoplay off
+     game: the stage style's layouts and components, no colours / fonts / sizes
 4  pagewell check page.html --json     same three-round rule
 5  Read the rubric. First frame must work with JS off (noscript).
 6  pagewell preview                    the page itself; story / game open in the player
-     story / game that should speak: data-narration, then pagewell voice page.html --json (references/voice.md)
+     story: pagewell voice page.html --json (always); a game only when asked (references/voice.md)
 
 ── then ──
 7  Publish: pagewell publish draft.md --json       → their Documents, images included
@@ -428,9 +432,9 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | They want a résumé | `article` for now; say in one line that it is laid out as an article |
 | Using a `doc` template | Write **Markdown or the template's front-matter fields** |
 | Using an `artifact` template | Write **one HTML file**. No second page, no `fetch`, no `<form>` |
-| They want it vertical, "like a video", one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage, each with a `data-layout` and `data-tone` from the stage style; ≤ 140 characters each; no colours, fonts or sizes of your own; never build your own player, progress bar or autoplay (`references/stage.md`) |
+| They want it vertical, "like a video", a slideshow that plays itself, one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage that play by themselves; every slide speaks its `data-narration` line (`pagewell voice`). Design it freely — layout, colours, fonts, motion; motion keyed to `[data-slide][data-active]` so it records cleanly; never build your own player, progress bar, autoplay timer or sound (`references/stage.md`) |
 | They want something to play | `game`. Starts on an HTML start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause`; the score and messages are the style's HTML, the canvas draws with `pagewell.colors` (`references/stage.md`) |
-| They want a story or game to speak | Write `data-narration` (a slide's spoken line, or `<audio data-say>` in a game), run `pagewell voice`. It uses the user's own Qwen TTS key (`DASHSCOPE_API_KEY`) and bills their account — only when they ask. On `tts_key_missing` tell them how to set it; **never ask for the key in the chat**. Never add your own sound button or `<audio>` player to a story (`references/voice.md`) |
+| A story's voice, or a game that should speak | Every story: write `data-narration` on each slide and run `pagewell voice` — no need to ask. A game: `<audio data-say>` lines only when they ask. It uses the user's own Qwen TTS key (`DASHSCOPE_API_KEY`) and bills their account (`--dry-run` shows the characters first). On `tts_key_missing` tell them how to set it — the story plays silently until then; **never ask for the key in the chat**. Never add your own sound button or `<audio>` player to a story (`references/voice.md`) |
 | They want a video of a story or game — or of any page they published | `pagewell record --check` first and relay its `steps` (install OBS, turn on its WebSocket server); then `pagewell record <file or link>`. A link gets `?toolbar=0` and a phone layout by itself; an ordinary page needs `--seconds`. A game is played by a person in OBS's Interact window — say so before running. **Never stop their own OBS recording or stream** (`obs_busy`), never ask for the OBS password (`references/recording.md`) |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
 | A required input is missing | **Ask.** Never invent it |
@@ -487,8 +491,8 @@ This file is the whole normal flow. Load one of these only when you hit it:
 | `templates.md` | which template a request gets, writing a house template |
 | `components.md` | building a component, or one is not doing what you meant |
 | `artifact.md` | writing a running page: single-file contract, checks, vs embed |
-| `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, the stage style (layouts, tones, components), slides, timing, input, sound, X |
-| `voice.md` | a story or game that speaks: `data-narration`, `pagewell voice`, the Qwen TTS key |
+| `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, a story's two requirements, the stage style (layouts, tones, components), timing, input, sound, recording, X |
+| `voice.md` | every story's narration, a game's voice lines: `data-narration`, `pagewell voice`, the Qwen TTS key |
 | `recording.md` | a video of a story or game: OBS set-up, `pagewell record` |
 | `libraries.md` | diagrams, formulas, interactive charts, animation, `embed` |
 | `charts.md` | a ` ```chart ` is not doing what you meant |

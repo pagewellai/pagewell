@@ -8,12 +8,14 @@ images.
 
 ## When
 
-Only when they ask for sound: "with a voiceover", "read it out", "narrated",
-"make it talk", "配音", "旁白", "有声音", "念出来" — or a video for Douyin /
-TikTok / Reels / Shorts that should speak (record it afterwards,
-`references/recording.md`). Do not add a voice on your own: it is billed to the
-user's Alibaba Cloud account, and a story with a voice opens silent until the
-reader taps for sound.
+- **Every story speaks.** A story is a narrated slideshow: write a line on
+  every slide and run `pagewell voice` before publishing or recording — no
+  need to ask first. Run `--dry-run` once to see the character count (it is
+  billed to the user's own Alibaba Cloud account, per character). If there is
+  no key (`tts_key_missing`), relay the set-up below; the story still plays
+  silently on its text timing until the voice is made.
+- **A game** gets voice lines only when they ask: "make it talk", "配音",
+  "旁白", "有声音", "念出来".
 
 ## Story: one line per slide
 
@@ -32,7 +34,8 @@ not a copy of what the slide shows:
 - One idea per line, about as long as the slide deserves: Chinese runs about
   4–5 characters a second, English about 2.5 words a second. A slide stays at
   most 30 s; a longer line gets a warning — split the slide.
-- A slide without `data-narration` stays silent and keeps its usual timing.
+- Every slide gets a line; `check` warns about a slide without one (it would
+  stay silent on its text timing).
 - Write it in the page's language: `<html lang>` sets the voice's language.
 
 Then:
