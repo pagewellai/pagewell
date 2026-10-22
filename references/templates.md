@@ -85,8 +85,8 @@ layout.
 ### Reader controls stay outside the document
 
 When a current standalone PageWell export is hosted inside PageWell, its
-reading-width and appearance controls live in the PageWell top bar, never in
-the article. The default measure and gutters are the same as a Markdown reading
+reading-width and appearance controls live in the ⋯ menu of PageWell's floating
+button, never in the article. The default measure and gutters are the same as a Markdown reading
 page; wide is an explicit reader override. Arbitrary HTML artifacts do not get
 these controls.
 

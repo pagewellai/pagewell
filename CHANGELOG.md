@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.14.1 — 2026-10-22
+
+Web pages open like stories and games: full screen with PageWell's floating button; pagewell preview shows HTML pages the same way.
+
+Source commit `8cf0d8b`. Update with `pagewell upgrade`.
+
 ## v0.14.0 — 2026-10-22
 
 Stories: two requirements only — they play by themselves and every slide speaks (pagewell voice). Design is free; the stage style is optional for stories. Recording with pagewell record works as before.

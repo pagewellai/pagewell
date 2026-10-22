@@ -1,6 +1,6 @@
 {
   "name": "pagewell-skill",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "The PageWell skill, also a DeepSeek Harness plugin: write a designed article or a one-page artifact, check it against its template, and publish it as a link, a share code or a single HTML file.",
   "type": "module",
   "main": "./dsh/index.js",
