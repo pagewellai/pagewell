@@ -141,6 +141,11 @@ it playing on a phone and recording cleanly:
 - **No sound of your own** — no `<audio>`, no music, no sound button. The
   narration is the sound; PageWell's sound button (top right) turns it on, and
   captions of the line show at the bottom (keep that strip calm).
+- **Keep two corners free.** PageWell draws over the stage at the top — the
+  progress bar across it, and the caption and sound buttons in the top-right
+  corner (about 100 × 64 px under the bar) — and the floating button bottom
+  right (60 × 60). Put nothing there that must be read: start a page number or
+  a kicker on the right below y ≈ 112, or put it on the left.
 - Give `body` one opaque background colour (or each slide its own): a screen
   that is not 9:16 shows it around the stage.
 - **The first slide is also the link preview.** PageWell photographs it (after
