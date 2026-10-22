@@ -10,7 +10,7 @@ description: >
   ("写篇文章", "竖屏", "小游戏", "配音", "录成视频"); also templates, charts,
   X drafts ("发到 X 长文").
 metadata:
-  version: "v0.14.3"
+  version: "v0.14.4"
 ---
 
 # PageWell
@@ -79,7 +79,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.14.3
+0  pagewell doctor --json --skill-version v0.14.4
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md

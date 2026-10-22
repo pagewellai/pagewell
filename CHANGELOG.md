@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.14.4 — 2026-10-22
+
+iPhone: Chinese captions and player text no longer render as boxes; stories get a font-stack rule that works on iOS.
+
+Source commit `0529428`. Update with `pagewell upgrade`.
+
 ## v0.14.3 — 2026-10-22
 
 Player: no black strip under a story in X's iOS in-app browser; stories keep the top-right corner free for the caption and sound buttons.

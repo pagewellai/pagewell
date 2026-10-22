@@ -148,6 +148,11 @@ it playing on a phone and recording cleanly:
   a kicker on the right below y ≈ 112, or put it on the left.
 - Give `body` one opaque background colour (or each slide its own): a screen
   that is not 9:16 shows it around the stage.
+- **Fonts are the reader's own** (no web fonts can load). Write a stack that
+  works on an iPhone: `"PingFang SC", "Hiragino Sans GB", -apple-system,
+  "Segoe UI", Roboto, "Noto Sans CJK SC", sans-serif` — PingFang **before**
+  `-apple-system` / `system-ui` (put first, they turn Chinese into "?" boxes on
+  iOS), and `-apple-system` still in the list (PingFang has no ↗ → ✓ symbols).
 - **The first slide is also the link preview.** PageWell photographs it (after
   its entrance animations) for the card X, WeChat and Slack show. Make it
   readable at a glance; nothing important in the bottom-right corner.

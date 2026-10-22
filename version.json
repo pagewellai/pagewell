@@ -1,7 +1,7 @@
 {
-  "version": "v0.14.3",
-  "commit": "d3cae01116f3f6cbe65b63d957dd2d54ec32eb83",
-  "built_at": "2026-10-22T05:05:22Z",
+  "version": "v0.14.4",
+  "commit": "0529428363355df7b92ca727ab1002d751ded422",
+  "built_at": "2026-10-22T05:12:08Z",
   "platforms": ["darwin/arm64","darwin/amd64","linux/amd64","linux/arm64","windows/amd64","windows/arm64"],
   "install": "https://github.com/pagewellai/pagewell",
   "binaries": "https://raw.githubusercontent.com/pagewellai/pagewell/binaries/bin/",
