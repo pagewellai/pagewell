@@ -70,6 +70,7 @@ The CLI adds its own:
 | `obs_page_timeout` | The page did not finish loading in OBS; the message names the script error when there is one — check it with `pagewell preview` |
 | `obs_record_failed` | OBS would not start (or change for) the recording; the message has OBS's own words |
 | `obs_disconnected` | OBS quit or dropped the connection mid-way |
+| `browser_not_found` | `pagewell cover` needs Chrome, Edge or Chromium on this computer. Install Google Chrome, or set `CHROME_BIN` to a Chromium-based browser |
 | `ffmpeg_missing` | `--for x` / `vertical` re-encode the recording with ffmpeg, and this computer has none. On a Mac: `brew install ffmpeg`; or `--for original` for OBS's own file |
 
 ## Order to follow when storage runs out

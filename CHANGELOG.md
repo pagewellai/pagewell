@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.16.0 — 2026-10-22
+
+pagewell cover: a sharp 9:16 cover image (the video's first frame) — up to 2160x3840 real pixels — made with this computer's Chrome, no OBS.
+
+Source commit `8bd4348`. Update with `pagewell upgrade`.
+
 ## v0.15.0 — 2026-10-22
 
 pagewell record --for x (default): videos encoded to X's upload spec, 720x1280 (1080x1920 with X Premium); --for vertical for Douyin/TikTok/Reels/Shorts; --for original keeps OBS's file. Captions in videos sit above the apps' bottom overlay.

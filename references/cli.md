@@ -625,6 +625,34 @@ is kept) or `obs_exit`. `for` is what the file was encoded for (`original` when
 encoding failed — a warning says why). `page_errors` lists script errors the page threw while
 it played. A few progress lines go to stderr.
 
+## cover
+
+```
+pagewell cover <page.html | link> [-o FILE.png|FILE.jpg] [--size WxH] [--json]
+```
+
+A sharp 9:16 still of the page — the same frame a recording starts on: a
+story's cover slide with its entrance finished, a game's start screen, any
+other page laid out at a phone's width (390 px). It opens the page in this
+computer's own Chrome (or Edge, Chromium, Brave; `CHROME_BIN` picks one) in the
+background, at the stage's size and a pixel density that makes `--size` real
+pixels — `2160x3840` is a true 4K image, not an enlargement. No OBS, no account.
+
+- `--size` is the 360 × 640 stage times 2, 3, 4 or 6: `720x1280`, `1080x1920`
+  (default), `1440x2560`, `2160x3840`.
+- `-o` ending in `.jpg` saves a JPEG (quality 92); otherwise PNG. Default:
+  `NAME-cover.png` next to the page; for a link, in the current folder.
+- A link must open for anyone (`link_unavailable` otherwise), as for `record`.
+  A local file can be any HTML page.
+
+```json
+{"file": "/…/story-cover.png", "bytes": 612344, "width": 1080, "height": 1920, "format": "png",
+ "display": "story", "browser": "Google Chrome", "warnings": []}
+```
+
+`display` is `story`, `game` or `page`. A warning means the page never said it
+was ready within 15 s — the image is what it showed then.
+
 ## brand
 
 ```

@@ -3,14 +3,14 @@ name: pagewell
 description: >
   Write and publish a designed document — an article, a report — or a
   one-page artifact that runs in the browser: a principle explainer, a
-  vertical story that plays itself like a narrated slideshow (Qwen TTS), a
-  small game; hand back a link. A story or game can be recorded as an MP4
-  with OBS. Use for "write an article", "explain X with a demo", "make it
-  vertical", "make a game", "publish", "voiceover", "record a video"
-  ("写篇文章", "竖屏", "小游戏", "配音", "录成视频"); also templates, charts,
-  X drafts ("发到 X 长文").
+  vertical story that plays itself with a voice (Qwen TTS), a small game;
+  hand back a link. Stories and games record as MP4 (OBS) with a cover image.
+  Use for "write an article", "explain X with a demo", "make it vertical",
+  "make a game", "publish", "record a video", "cover" ("写篇文章", "竖屏",
+  "小游戏", "配音", "录成视频", "封面"); also templates, charts, X drafts
+  ("发到 X 长文").
 metadata:
-  version: "v0.15.0"
+  version: "v0.16.0"
 ---
 
 # PageWell
@@ -79,7 +79,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.15.0
+0  pagewell doctor --json --skill-version v0.16.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -119,6 +119,7 @@ text and the CLI; do not wait for the user to ask whether an update exists.
    Or export one HTML file. Already have one? `pagewell publish <file>`
    Want it on X as well? `pagewell x draft draft.md` (§Sending to X)
    A video of a story / game, or of a published link? `pagewell record <file|link> --check --json`, then record (references/recording.md)
+   Its cover image? `pagewell cover <file|link> --json` (2160x3840 with --size for 4K)
 8  Report: what you made, what you checked, what you had to make up
 ```
 
@@ -436,6 +437,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | They want something to play | `game`. Starts on an HTML start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause`; the score and messages are the style's HTML, the canvas draws with `pagewell.colors` (`references/stage.md`) |
 | A story's voice, or a game that should speak | Every story: write `data-narration` on each slide and run `pagewell voice` — no need to ask. A game: `<audio data-say>` lines only when they ask. It uses the user's own Qwen TTS key (`DASHSCOPE_API_KEY`) and bills their account (`--dry-run` shows the characters first). On `tts_key_missing` tell them how to set it — the story plays silently until then; **never ask for the key in the chat**. Never add your own sound button or `<audio>` player to a story (`references/voice.md`) |
 | They want a video of a story or game — or of any page they published | `pagewell record --check` first and relay its `steps` (install OBS, turn on its WebSocket server); then `pagewell record <file or link>` — `--for x` (the default, 720×1280 to X's spec; `--size 1080x1920` for X Premium), `--for vertical` for Douyin / TikTok / Reels / Shorts. It needs ffmpeg. A link gets `?toolbar=0` and a phone layout by itself; an ordinary page needs `--seconds`. A game is played by a person in OBS's Interact window — say so before running. **Never stop their own OBS recording or stream** (`obs_busy`), never ask for the OBS password (`references/recording.md`) |
+| They want a cover image, a thumbnail or a picture of a page (the video's first frame) | `pagewell cover <file or link> --json` — 1080 × 1920 PNG; `--size 2160x3840` for the sharpest, `-o cover.jpg` for JPEG. Uses their own Chrome, no OBS (`references/recording.md`) |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
 | A required input is missing | **Ask.** Never invent it |
 | `check` reports errors | Do not push, do not export |

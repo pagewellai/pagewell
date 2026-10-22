@@ -58,6 +58,21 @@ record the local file, or make a share link first. The file is named after the
 link (`7BT59JZCA53S9YG91HKXYXRAT8.mp4`) in the current folder unless `-o` says
 otherwise.
 
+## A cover image
+
+For the post's picture, a thumbnail or a cover a platform asks for:
+
+```
+pagewell cover story.html --json                     # → story-cover.png, 1080 × 1920
+pagewell cover https://p.pagewell.ai/s/… --size 2160x3840 -o cover.png --json
+```
+
+It is the video's first frame as a still — the story's cover slide, the game's
+start screen, a page at phone width — made with this computer's Chrome, so it
+needs no OBS. `--size 2160x3840` gives a true 4K image (sharper than enlarging a
+screenshot); `-o cover.jpg` saves a JPEG. Read back `file` and the size; if it
+answers `browser_not_found`, they need Google Chrome (or Edge) installed.
+
 ## 1 · Check the computer
 
 ```
