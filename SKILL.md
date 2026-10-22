@@ -10,7 +10,7 @@ description: >
   ("写篇文章", "竖屏", "小游戏", "配音", "录成视频"); also templates, charts,
   X drafts ("发到 X 长文").
 metadata:
-  version: "v0.14.4"
+  version: "v0.15.0"
 ---
 
 # PageWell
@@ -47,8 +47,8 @@ with a `click` fallback, drags on touch events with `preventDefault()` in
 `touchmove`, everything that matters between y = 48 and y = 592 because phones
 cut up to 48 px off the top and bottom; the bottom-right corner stays
 free). A story's motion starts when its slide shows (`[data-slide][data-active]`,
-`pagewell:slide`), so the same page records as a 1080 × 1920 video with OBS
-Studio on their computer (`pagewell record`); a game can be recorded too.
+`pagewell:slide`), so the same page records as a 9:16 video with OBS Studio on
+their computer (`pagewell record`, encoded for X by default); a game can be recorded too.
 
 A résumé gets its own template later. Until then write it with `article` and
 say in one line that it is laid out as an article.
@@ -79,7 +79,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.14.4
+0  pagewell doctor --json --skill-version v0.15.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -435,7 +435,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | They want it vertical, "like a video", a slideshow that plays itself, one screen at a time, or for X | `story`. Slides are `<section data-slide>` on a 360 × 640 stage that play by themselves; every slide speaks its `data-narration` line (`pagewell voice`). Design it freely — layout, colours, fonts, motion; motion keyed to `[data-slide][data-active]` so it records cleanly; never build your own player, progress bar, autoplay timer or sound (`references/stage.md`) |
 | They want something to play | `game`. Starts on an HTML start screen, plays with one thumb (`pointerdown`/`pointermove`/`pointerup`), pauses on `pagewell:pause`; the score and messages are the style's HTML, the canvas draws with `pagewell.colors` (`references/stage.md`) |
 | A story's voice, or a game that should speak | Every story: write `data-narration` on each slide and run `pagewell voice` — no need to ask. A game: `<audio data-say>` lines only when they ask. It uses the user's own Qwen TTS key (`DASHSCOPE_API_KEY`) and bills their account (`--dry-run` shows the characters first). On `tts_key_missing` tell them how to set it — the story plays silently until then; **never ask for the key in the chat**. Never add your own sound button or `<audio>` player to a story (`references/voice.md`) |
-| They want a video of a story or game — or of any page they published | `pagewell record --check` first and relay its `steps` (install OBS, turn on its WebSocket server); then `pagewell record <file or link>`. A link gets `?toolbar=0` and a phone layout by itself; an ordinary page needs `--seconds`. A game is played by a person in OBS's Interact window — say so before running. **Never stop their own OBS recording or stream** (`obs_busy`), never ask for the OBS password (`references/recording.md`) |
+| They want a video of a story or game — or of any page they published | `pagewell record --check` first and relay its `steps` (install OBS, turn on its WebSocket server); then `pagewell record <file or link>` — `--for x` (the default, 720×1280 to X's spec; `--size 1080x1920` for X Premium), `--for vertical` for Douyin / TikTok / Reels / Shorts. It needs ffmpeg. A link gets `?toolbar=0` and a phone layout by itself; an ordinary page needs `--seconds`. A game is played by a person in OBS's Interact window — say so before running. **Never stop their own OBS recording or stream** (`obs_busy`), never ask for the OBS password (`references/recording.md`) |
 | "An article plus a demo" | `doc` + one `embed`. Do not promote the demo to a whole artifact |
 | A required input is missing | **Ask.** Never invent it |
 | `check` reports errors | Do not push, do not export |

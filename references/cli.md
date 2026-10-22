@@ -556,15 +556,20 @@ page).
 ## record
 
 ```
-pagewell record <page.html | link> [-o FILE] [--size WxH] [--fps N] [--tail DUR]
+pagewell record <page.html | link> [--for x|vertical|original] [-o FILE] [--size WxH] [--fps N] [--tail DUR]
                                    [--rounds N] [--seconds DUR] [--max DUR] [--obs-url URL]
                                    [--no-launch] [--no-interact] [--json]
 pagewell record [<page.html | link>] --check [--json]
 ```
 
 Plays a story or a game in OBS Studio on this computer, through OBS's WebSocket
-server, and saves a 9:16 video of the page alone. Guidance:
-`references/recording.md`.
+server, and saves a 9:16 video of the page alone, encoded for where it will be
+posted. Guidance: `references/recording.md`.
+
+- `--for` is where the video will play: `x` (default — 720×1280 to X's upload
+  spec; `--size 1080x1920` for an X Premium account), `vertical` (1080×1920 for
+  Douyin, TikTok, Reels, Shorts) or `original` (OBS's own file, untouched).
+  `x` and `vertical` need ffmpeg (`ffmpeg_missing` otherwise).
 
 - A link (`https://p.pagewell.ai/s/…`) is recorded with `?toolbar=0` added and
   laid out at a phone's width (390 px) at the video size. A story or game behind
@@ -574,7 +579,8 @@ server, and saves a 9:16 video of the page alone. Guidance:
 - `-o` defaults to the page's name with `.mp4`, next to it; for a link, the last
   part of the link in the current folder.
 - `--size` is the 360 × 640 stage times 2, 3, 4 or 6: `720x1280`,
-  `1080x1920` (default), `1440x2560`, `2160x3840`. `--fps` 24–60, default 30.
+  `1080x1920`, `1440x2560`, `2160x3840` — default from `--for`; `--for x` takes
+  at most `1080x1920`. `--fps` 24–60, default 30.
 - `--tail` keeps recording after the end: 1 s after a story's last slide, 3 s
   after a game's last game-over screen. `--rounds` (game, default 1): stop after
   that many game-over screens. `--max` caps the recording (a story: its length
@@ -594,9 +600,9 @@ server, and saves a 9:16 video of the page alone. Guidance:
  "obs": {"url": "ws://127.0.0.1:4455", "local": true, "installed": true, "app": "/Applications/OBS.app",
          "running": true, "websocket": {"enabled": false, "port": 4455, "auth_required": true},
          "password_from": "obs", "connected": false, "error_code": "obs_websocket_off"},
- "ffmpeg": true,
+ "ffmpeg": true, "for": "x",
  "page": {"file": "/…/story.html", "display": "story", "slides": 8, "voiced": 8,
-          "estimated_seconds": 46.2, "output": "/…/story.mp4", "width": 1080, "height": 1920}}
+          "estimated_seconds": 46.2, "output": "/…/story.mp4", "width": 720, "height": 1280}}
 ```
 
 When connected, `obs` also has `version`, `websocket_version`,
@@ -605,9 +611,9 @@ When connected, `obs` also has `version`, `websocket_version`,
 A recording:
 
 ```json
-{"file": "/…/story.mp4", "bytes": 14464169, "seconds": 46.8, "width": 1080, "height": 1920, "fps": 30,
+{"file": "/…/story.mp4", "bytes": 3214469, "seconds": 46.8, "width": 720, "height": 1280, "fps": 30,
  "display": "story", "slides": 8, "audio": "narration", "stopped_by": "end", "complete": true,
- "obs": "OBS 32.2.2 (obs-websocket 5.7.4)", "warnings": []}
+ "for": "x", "obs": "OBS 32.2.2 (obs-websocket 5.7.4)", "warnings": []}
 ```
 
 `audio` is `narration`, `game`, `silent` or — for an ordinary page from a link —
@@ -615,7 +621,8 @@ A recording:
 is `end` (the story finished), `game_over` (the rounds were played), `time`
 (`--seconds` were recorded), `obs`
 (someone pressed Stop Recording), `max`, `interrupt` (Ctrl-C — what was recorded
-is kept) or `obs_exit`. `page_errors` lists script errors the page threw while
+is kept) or `obs_exit`. `for` is what the file was encoded for (`original` when
+encoding failed — a warning says why). `page_errors` lists script errors the page threw while
 it played. A few progress lines go to stderr.
 
 ## brand

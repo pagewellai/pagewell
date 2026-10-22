@@ -79,7 +79,7 @@ or update PageWell from the Plugins page.
 Every activation starts with a read-only check for both halves:
 
 ```bash
-pagewell doctor --json --skill-version v0.14.4
+pagewell doctor --json --skill-version v0.15.0
 ```
 
 If either half is behind, the JSON includes the exact next command. The manual

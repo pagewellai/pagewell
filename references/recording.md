@@ -1,17 +1,32 @@
 # Recording a story or a game as a video (OBS)
 
-`pagewell record` turns a story or a game into a vertical **1080 × 1920 MP4**
-(9:16) — the size Douyin, TikTok, Reels, Shorts, X and WeChat Channels expect.
-It plays the page in **OBS Studio** on this computer, driving OBS through its
-own remote control (the OBS WebSocket server), and saves the file next to the
-page. No account, nothing uploaded.
+`pagewell record` turns a story or a game into a vertical **9:16 MP4** made for
+where it will be posted — **X by default** (720 × 1280, X's upload spec). It
+plays the page in **OBS Studio** on this computer, driving OBS through its own
+remote control (the OBS WebSocket server), then re-encodes the recording with
+ffmpeg and saves the file next to the page. No account, nothing uploaded.
 
 The video holds **the page only**: no PageWell player, no floating button, no
 progress bar, no sound or caption button. A story plays from its finished cover (the first
 frame, which apps use as the thumbnail) to its last slide on its own clock, with
 its narration if it has one (`references/voice.md`) and captions of that
-narration, always on. A game is played by a
-person, in an OBS window.
+narration, always on — a tenth of the height above the bottom, clear of the
+post text and controls X and the short-video apps lay over a vertical video. A
+game is played by a person, in an OBS window.
+
+## Where it will play: `--for`
+
+| They say | `--for` | The file |
+|---|---|---|
+| for X, a tweet, nothing in particular | `x` (default) | 720 × 1280, H.264 — X's upload spec, posts from any account |
+| for X, and their account has **X Premium** | `x --size 1080x1920` | 1080p — only Premium accounts get 1080p on X |
+| Douyin, TikTok, Reels, Shorts, WeChat Channels, 抖音, 视频号 | `vertical` | 1080 × 1920, H.264 |
+| they will edit it, or want OBS's own file | `original` | OBS's recording, untouched (large) |
+
+`x` and `vertical` need **ffmpeg** (`--check` lists it among the steps; on a Mac
+`brew install ffmpeg`). On X, an account without Premium can post videos of at
+most **2 min 20 s** from its apps: a longer `--for x` recording comes back with a
+warning — read it out, and say a Premium account can post it as it is.
 
 ## When
 
@@ -58,6 +73,7 @@ It changes nothing and opens nothing. `ready: true` → go on. Otherwise relay
 | the WebSocket server is off | in OBS: **Tools → WebSocket Server Settings → tick “Enable WebSocket server”** → OK |
 | OBS asks for a password | usually nothing: pagewell reads the password from OBS's own settings on this computer. If it still fails, they put `OBS_WEBSOCKET_PASSWORD` in their shell profile, or untick “Enable Authentication” there |
 | OBS is busy | stops their own recording, stream or virtual camera in OBS |
+| install ffmpeg | `brew install ffmpeg` on a Mac (or ffmpeg.org) — or record with `--for original` |
 | a recording may come out black (macOS) | OBS → Settings → Advanced → Sources → unticks “Enable Browser Source Hardware Acceleration”, restarts OBS — only needed if it happens |
 
 OBS not running is fine: `record` opens it by itself. After they change
@@ -83,8 +99,9 @@ pagewell record game.html --json
   The seconds before they start playing are paused out of the video, and so are
   the pauses between rounds. `--rounds 3` records three rounds; `--max 5m` caps
   the length (10 minutes by default).
-- `-o clip.mp4` names the file. `--size 720x1280` (or `1440x2560`,
-  `2160x3840`) changes the resolution; `--fps 60` makes motion smoother.
+- `-o clip.mp4` names the file. `--size` changes the resolution within what
+  `--for` allows (`--for original` takes `1440x2560`, `2160x3840` too);
+  `--fps 60` makes motion smoother.
 - Ctrl-C stops early and keeps what was recorded (`complete: false`).
 
 What it does to OBS, and why that is safe: it switches the canvas to the video
@@ -97,8 +114,8 @@ anything it did not start.
 
 ## 3 · Report
 
-Read back `file`, `seconds`, `bytes`, the size (`width` × `height`) and `audio`
-(`narration`, `game` or `silent`). When `complete` is false, say why
+Read back `file`, `seconds`, `bytes`, the size (`width` × `height`), `for` (what
+it was encoded for) and `audio` (`narration`, `game` or `silent`). When `complete` is false, say why
 (`stopped_by`: `obs` — someone pressed Stop in OBS; `max`; `interrupt`;
 `obs_exit`). Read every `warnings` and `page_errors` entry out — a page error
 usually explains a story that stopped moving. Ask them to watch it once before

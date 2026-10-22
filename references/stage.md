@@ -271,7 +271,7 @@ phone. `pagewell check` flags the first block; fix every flag.
 ## Recording a video
 
 `pagewell record story.html` plays the page in OBS Studio on this computer and
-saves a 1080 × 1920 MP4 of the page alone — no player, no floating button, no
+saves a 9:16 MP4 of the page alone, encoded for X by default (`--for vertical` for Douyin, TikTok, Reels, Shorts) — no player, no floating button, no
 progress bar, no sound button — for Douyin, TikTok, Reels, Shorts or X. A story
 plays itself (with its voice); a game is played by a person in an OBS window.
 Check the computer first with `pagewell record story.html --check`. Everything
@@ -310,4 +310,4 @@ link that was already posted on X keeps its old card for a while; adding
 design, and — for a game — that scores last only while the page is open. Ask
 them to open it on their phone once (X, WeChat / Feishu, Safari). If they might
 post it as a video (Douyin, TikTok, Reels), say in one line that
-`pagewell record` can turn it into a 1080 × 1920 MP4 with OBS on their computer.
+`pagewell record` can turn it into a 9:16 MP4 for X (or Douyin, TikTok) with OBS on their computer.
