@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.14.2 — 2026-10-22
+
+Story captions: smaller, no background box; the text colour follows each slide's background.
+
+Source commit `b19ffeb`. Update with `pagewell upgrade`.
+
 ## v0.14.1 — 2026-10-22
 
 Web pages open like stories and games: full screen with PageWell's floating button; pagewell preview shows HTML pages the same way.
