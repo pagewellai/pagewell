@@ -4,13 +4,12 @@ description: >
   Write and publish a designed document — an article, a report — or a
   one-page artifact that runs in the browser: a principle explainer, a
   vertical story that plays itself with a voice (Qwen TTS), a small game;
-  hand back a link. Stories and games record as MP4 (OBS) with a cover image.
-  Use for "write an article", "explain X with a demo", "make it vertical",
-  "make a game", "publish", "record a video", "cover" ("写篇文章", "竖屏",
-  "小游戏", "配音", "录成视频", "封面"); also templates, charts, X drafts
-  ("发到 X 长文").
+  hand back a link. Stories and games record as MP4 with a cover. Use for
+  "write an article", "explain X with a demo", "make it vertical", "make a
+  game", "publish", "record a video", "cover" (写篇文章、竖屏、小游戏、配音、录成视频、封面); also
+  templates, charts, X drafts (发到 X 长文), music & book uploads (上传音乐、书籍).
 metadata:
-  version: "v0.16.0"
+  version: "v0.17.0"
 ---
 
 # PageWell
@@ -79,7 +78,7 @@ Always begin with step 0. It is the automatic update check for both this skill
 text and the CLI; do not wait for the user to ask whether an update exists.
 
 ```
-0  pagewell doctor --json --skill-version v0.16.0
+0  pagewell doctor --json --skill-version v0.17.0
                                           not installed → scripts/install.sh
      unknown --skill-version → pagewell upgrade, then run step 0 again
      skill_update.available → run skill_update.command, then re-read SKILL.md
@@ -419,6 +418,29 @@ shape: `references/cli.md`.
 ⛔ You never open the connect link or click Allow, and you never publish the
 draft — there is no command for that, on purpose.
 
+## Music and books (their private library)
+
+PageWell also keeps a private library of their own songs and e-books, which they
+play and read in the console (Music, Books) or in their own music and reading
+apps. When they ask to put files there — "upload my music", "add these books to
+PageWell", "上传音乐", "把这些书传上去" — pass **only the files and folders they
+named**:
+
+```
+pagewell media upload <file-or-folder>… --json     # --dry-run only checks
+```
+
+It finds the music and books in the folders (everything else is skipped and
+counted) and **checks the space before sending a byte**: `quota_exceeded` means
+nothing was uploaded — say what it needs and what is free, and offer fewer files
+at a time or Pro. Then it uploads several files at once and retries what the
+network drops. A big folder takes a while: let it run in the background if you
+can; running it again only adds what is missing. Read `problems` out. On Pro, AI
+organize then tidies names and adds genres. **You can add to the library, never
+read it** — there is no listing, playing or opening: they look in the console
+(`music_url`, `books_url`) or their apps (`apps_url`). Details:
+`references/media.md`.
+
 ## Working on a template
 
 `fork` an existing one, edit, `validate`, `save`. For a house style prefer
@@ -449,6 +471,7 @@ anyone's layout. Full format and the authoring loop: `references/templates.md`.
 | A sandbox denies a write (`operation not permitted`, `credentials_unwritable`) | Only commands that write to the home directory need it: `auth login` (waiting), `auth logout`, `upgrade`, `scripts/install.sh`, `templates add`/`new`/`fork`/`edit`, `brand`. Rerun that exact command with the harness's one-command permission and a one-sentence reason. Writing, checking, previewing, exporting and publishing need none. Never move credentials or caches into the project |
 | `x_not_connected` | Read out the link in the hint (or from `pagewell x connect`); they open it and click Allow in their own browser. Never open it or approve it for them |
 | Sending to X | `pagewell x draft` makes a **draft** only. Say it is waiting in X → Articles → Drafts; never say it was posted. Read every warning out |
+| They want songs or e-books in their PageWell library | `pagewell media upload <only the paths they named> --json`. It checks the space before sending anything — on `quota_exceeded` nothing went up: say needed vs free, offer fewer files or Pro. You can add, never list or read the library; they look in the console or their own apps (`references/media.md`) |
 | Publishing one file | `pagewell publish` puts it in their Documents — public and searchable by default, local images included — and does not create or join a visible Space. Read `searchable` back — the owner may have turned indexing off for their account or space. Use `--no-index` when they want it public but out of search engines; `--space` only when explicitly requested; `--visibility unlisted|code|password` only for an explicitly restricted share |
 | `engine_outdated` | `pagewell upgrade`, then retry. Do not fall back to another template — the template stays what it is |
 | `save` on a template other documents follow | Say so first; it reaches every document tracking `@^major` |
@@ -496,6 +519,7 @@ This file is the whole normal flow. Load one of these only when you hit it:
 | `stage.md` | writing a `story` or a `game`: the 360 × 640 stage, a story's two requirements, the stage style (layouts, tones, components), timing, input, sound, recording, X |
 | `voice.md` | every story's narration, a game's voice lines: `data-narration`, `pagewell voice`, the Qwen TTS key |
 | `recording.md` | a video of a story or game: OBS set-up, `pagewell record` |
+| `media.md` | songs or e-books into their library: `pagewell media upload`, and what to say after |
 | `libraries.md` | diagrams, formulas, interactive charts, animation, `embed` |
 | `charts.md` | a ` ```chart ` is not doing what you meant |
 | `cli.md` | exact flags, share modes, the JSON shapes, `x draft` |

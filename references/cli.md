@@ -727,6 +727,77 @@ is kept after a downgrade (nothing is deleted) and works again after upgrading;
 Limits: 20 drafts per account per day. X Articles need X Premium on the
 connected account — without it X refuses the draft (`x_rejected`, HTTP 403).
 
+## media upload (music and books)
+
+```
+pagewell media upload <file|folder>… [--kind music|book] [--jobs N] [--no-organize] [--dry-run] [--json]
+pagewell music upload <file|folder>…     # the same, music only
+pagewell books upload <file|folder>…     # the same, books only
+```
+
+Adds songs and e-books to the account's private music and books library.
+Guidance — when, and what to say: `references/media.md`.
+
+Folders are searched all the way down; music is MP3, FLAC, M4A, OGG/OGA, Opus,
+WAV and books are EPUB, PDF, MOBI, AZW/AZW3, CBZ, TXT, by extension (the server
+then reads the real format from the file). Everything else is skipped and
+counted; hidden files and folders are not looked at. A path that does not exist
+stops the command before anything happens (`not_found`).
+
+Before any byte is sent it computes each file's SHA-256 and runs one preflight
+(500 files per request): `duplicate` files are already in the library,
+`too_large` ones are over the plan's limit for one file, and the new ones must
+fit in the free space — if they do not, it stops with `quota_exceeded` (or
+`plan_readonly`) and uploads nothing. `--dry-run` stops there either way and
+reports. Then `--jobs` files (default 4, 1–8) upload at the same time, each in
+parts sent in order; network errors, 429 and 5xx are retried a few times with
+backoff, a file that still fails is cancelled on the server and listed, and the
+others carry on. Then, unless `--no-organize`, AI organize runs for each kind
+that got new files (Pro; for about three minutes at most — what is left is
+picked up within the hour, or with Organize now in the console). Progress goes
+to stderr on a terminal only.
+
+```json
+{"dry_run": false, "found": {"music": 40, "book": 2}, "to_upload": 30, "to_upload_bytes": 432537600,
+ "added": 30, "added_bytes": 432537600, "added_by_kind": {"music": 28, "book": 2},
+ "duplicates": 11, "skipped": 5, "skipped_by_ext": {".jpg": 3, ".nfo": 2}, "failed": 1,
+ "problems": [{"path": "Album/live.flac", "kind": "music", "size": 641728512, "status": "too_large",
+               "reason": "612.0 MiB; one file can be up to 500.0 MiB"}],
+ "added_files": [{"path": "Album/01 Intro.flac", "kind": "music", "id": "trk_…", "title": "Intro", "artist": "…"}],
+ "space": {"needed_bytes": 432537600, "available_bytes": 7838315315, "used_bytes": 2899102924,
+           "quota_bytes": 10737418240, "enough": true, "readonly": false,
+           "max_file_bytes": 524288000, "max_file_bytes_paid": 524288000, "free": false},
+ "organize": [{"kind": "music", "status": "done", "run_id": "org_…", "items": 28, "changed": 20, "pending": 0},
+              {"kind": "book", "status": "done", "run_id": "org_…", "items": 2, "changed": 1, "pending": 0}],
+ "music_url": "https://pagewell.ai/app/#/music", "books_url": "https://pagewell.ai/app/#/books",
+ "apps_url": "https://pagewell.ai/music-and-books"}
+```
+
+- `found` counts the music and book files found; `to_upload` the new ones.
+  `duplicates` were already in the library, or were the same file given twice
+  (sent once). `failed` counts everything in `problems`.
+- `problems[].status` is `too_large`, `unsupported`, `invalid` (an empty file),
+  `unreadable` (could not be read here) or `failed` (did not upload; `code` is
+  the server's error code, or `file_changed` / `unreadable` / `interrupted`).
+  `reason` is the sentence to read out. All of them are listed.
+- `added_files` lists up to 50 of what went in, with what the server read from
+  the tags; the counts are always complete.
+- `space.available_bytes` is `-1` and `quota_bytes` `0` when there is no limit.
+- `organize[].status` is `done`, `partial` (`pending` are left; they are picked
+  up within the hour) or `skipped`; `code` says why — `plan_required` (not Pro),
+  `conflict` (they turned AI organize off), `organize_unavailable`,
+  `organize_failed`. None of these is a failure of the command.
+
+Exit status 0 means everything that could go in went in — `problems` may still
+list files that are too large, empty or unreadable. Otherwise it is 1 with an
+error on stderr: `quota_exceeded` / `plan_readonly` (nothing uploaded, or the
+space ran out part-way), `upload_incomplete` (some files failed after retries),
+`interrupted`, `rate_limited` (the library's daily limit on new files),
+`forbidden_scope` (a token limited to one space — `pagewell auth login` again),
+`validation_failed` (no music or books in what was given). When it got as far as
+the check, the result above is on stdout as well. The command can only add:
+there is nothing to list or read the library with.
+
 ## themes
 
 ```

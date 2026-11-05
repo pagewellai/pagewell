@@ -4,6 +4,12 @@ Every entry is a release: a semver tag here and on the source repository, one
 binary per platform on the `binaries` branch, and the `SKILL.md` that goes with it. Older CLIs keep working —
 the API only ever adds fields — but the newest is what the skill text describes.
 
+## v0.17.0 — 2026-11-05
+
+pagewell media upload (also pagewell music upload / pagewell books upload): put songs and e-books into your private PageWell library — it checks the free space before sending a byte, uploads several files at once and picks up where a dropped upload stopped, then runs AI organize on Pro. Agents can add to the library but never read it.
+
+Source commit `d945853`. Update with `pagewell upgrade`.
+
 ## v0.16.0 — 2026-10-22
 
 pagewell cover: a sharp 9:16 cover image (the video's first frame) — up to 2160x3840 real pixels — made with this computer's Chrome, no OBS.

@@ -28,6 +28,7 @@ The `--json` shape:
 | `share_expired` | The share is gone | Create a new one |
 | `x_not_connected` | `pagewell x draft` needs the user's permission on X, once (or X revoked it) | **Read out the link in `hint`** (also `pagewell x connect`). The user opens it in their own browser and clicks Allow. Never open it or approve it for them |
 | `x_rejected` | X refused the request; `detail` has X's own words | HTTP 403 almost always means the X account has no Premium (Articles need it). Say so and stop — do not retry in a loop |
+| `media_too_large` | A song or book is over the plan's limit for one file (Free 25 MB, Pro 500 MB). `pagewell media upload` lists it in `problems` instead of failing | Read it out; on Free, Pro takes larger files — hand over `/pricing` |
 | `internal` | Server-side failure | Report it with the `request_id` |
 
 The CLI adds its own:
@@ -40,7 +41,8 @@ The CLI adds its own:
 | `network` | Cannot reach the server |
 | `engine_outdated` | This template needs a newer renderer than the CLI has. **Run `scripts/install.sh` and try again.** Do not fall back to another template — the user picked that one, and quietly using a different one is how they never find out |
 | `template_not_certified` | The version's own samples do not pass its own checks, so it cannot go on the shelf. `pagewell templates validate <id>` names them |
-| `interrupted` | Ctrl-C (or the harness stopped the command) before anything was produced. Nothing is half-done: `voice` kept the lines it had made, `record` put OBS back |
+| `interrupted` | Ctrl-C (or the harness stopped the command) before anything was produced. Nothing is half-done: `voice` kept the lines it had made, `record` put OBS back, `media upload` kept the files it had added (run it again for the rest) |
+| `upload_incomplete` | `pagewell media upload` added some files but others failed after retries; each is in `problems` with its reason. **Run the same command again** — what is already in the library is skipped. If the same file fails twice, read its reason out instead of looping |
 
 `pagewell voice` (`references/voice.md`):
 
